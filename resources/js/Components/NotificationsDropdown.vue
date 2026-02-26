@@ -69,12 +69,12 @@
             </div>
 
             <div class="px-4 py-2 border-t">
-                <!-- <Link
-          :href="route('notifications.index')"
-          class="text-sm font-medium text-blue-500 hover:text-blue-700"
-        >
-          Просмотреть все
-        </Link> -->
+                <Link
+                    href="/notifications"
+                    class="text-sm font-medium text-blue-500 hover:text-blue-700"
+                >
+                    Просмотреть все
+                </Link>
             </div>
         </div>
     </div>
@@ -82,8 +82,10 @@
 
 <script setup>
 import { ref } from "vue";
-import { Link, router } from "@inertiajs/vue3";
+import { Link, router, usePage } from "@inertiajs/vue3";
 import { Inertia } from "@inertiajs/inertia";
+
+const page = usePage();
 
 const isOpen = ref(false);
 const notifications = ref([]);
@@ -97,7 +99,7 @@ const formatDate = (dateString) => {
 const markAsRead = (notification) => {
     if (!notification.read_at) {
         router.post(
-            route("notifications.markAsRead", notification.id),
+            `/notifications/${notification.id}/mark-as-read`,
             {},
             {
                 preserveScroll: true,
@@ -111,9 +113,9 @@ const markAsRead = (notification) => {
 };
 
 const markAllAsRead = () => {
-    if ($page.props.unreadNotificationsCount > 0) {
+    if (page.props.unreadNotificationsCount > 0) {
         router.post(
-            route("notifications.markAllAsRead"),
+            "/notifications/mark-all-as-read",
             {},
             {
                 preserveScroll: true,
