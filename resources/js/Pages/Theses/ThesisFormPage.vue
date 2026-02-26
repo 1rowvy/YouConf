@@ -1,21 +1,36 @@
 <template>
-  <div class="p-4">
-    {{ section_name }}
-    <h1 class="text-2xl font-bold mb-4">
-      {{ isEditMode ? 'Редактировать тезис' : 'Создать тезис' }}
-    </h1>
-    <ThesesForm :section-id="section_id" :thesis="thesis" />
+  <div class="max-w-4xl mx-auto py-10 px-4">
+    <Link
+      :href="backUrl"
+      class="inline-flex items-center text-sm font-bold text-gray-400 hover:text-black mb-8 transition-all group"
+    >
+      <span class="mr-2 transform group-hover:-translate-x-1 transition-all">&larr;</span>
+      Назад
+    </Link>
+
+    <div class="bg-white border border-gray-100 p-8 md:p-12 rounded-[2.5rem] shadow-sm">
+      <div class="mb-10">
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-[#1a1a1a]">
+          {{ isEditMode ? 'Редактировать тезис' : 'Создать тезис' }}
+        </h1>
+        <p v-if="sectionLabel" class="mt-3 text-lg text-gray-400 font-medium">
+          {{ sectionLabel }}
+        </p>
+      </div>
+
+      <ThesesForm :section-id="section_id" :thesis="thesis" />
+    </div>
   </div>
 </template>
 
 <script>
-import { reactive } from 'vue'
-import { Inertia } from '@inertiajs/inertia'
+import { Link } from '@inertiajs/inertia-vue3'
 import ThesesForm from '@/Components/ThesesForm.vue'
 
 export default {
   name: 'ThesisFormPage',
   components: {
+    Link,
     ThesesForm,
   },
   props: {
@@ -26,15 +41,22 @@ export default {
     },
     thesis: Object,
   },
-  data() {
-    return {
-      form: reactive({
-        title: this.thesis ? this.thesis.title : '',
-        description: this.thesis ? this.thesis.description : '',
-        files: [],
-      }),
-      isEditMode: !!this.thesis, // Определяем режим редактирования
-    }
+  computed: {
+    isEditMode() {
+      return !!this.thesis
+    },
+    sectionLabel() {
+      return this.section_name || this.thesis?.section?.name || ''
+    },
+    backUrl() {
+      if (this.thesis?.section?.id) {
+        return `/sections/${this.thesis.section.id}`
+      }
+      if (this.section_id) {
+        return `/sections/${this.section_id}`
+      }
+      return '/sections'
+    },
   },
 }
 </script>

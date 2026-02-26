@@ -1,99 +1,102 @@
 <template>
-  <div class="flex">
-    <form
-      @submit.prevent="submit"
-      class="flex-1 md:flex-col md:items-start"
-      :class="{ 'pointer-events-none opacity-50': isSubmitting }"
-    >
-      <div class="flex flex-row w-full">
-        <div class="flex-1 mb-4 md:mr-4 w-3/5">
-          <label class="block text-gray-700 font-semibold mb-1">Название</label>
+  <form
+    @submit.prevent="submit"
+    :class="{ 'pointer-events-none opacity-50': isSubmitting }"
+  >
+    <div class="flex flex-col lg:flex-row gap-8">
+      <div class="flex-1 space-y-6">
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-2">Название</label>
           <input
             v-model="form.title"
             type="text"
-            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-[#1a1a1a] placeholder-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-gray-400"
             required
             placeholder="Введите название"
           />
-          <label class="block text-gray-700 font-semibold mb-1 mt-4">
-            Описание
-          </label>
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-2">Описание</label>
           <textarea
             v-model="form.description"
-            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-[#1a1a1a] placeholder-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-gray-400 resize-none"
             required
             placeholder="Введите описание"
-            rows="4"
+            rows="5"
           ></textarea>
-          <label class="block text-gray-700 font-semibold mb-1 mt-4">
-            Соавторы
-          </label>
-          <div
-            v-for="(coAuthor, index) in form.co_authors"
-            :key="index"
-            class="flex items-center mb-2"
-          >
-            <input
-              v-model="form.co_authors[index]"
-              type="text"
-              class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              placeholder="Введите имя соавтора"
-            />
-            <button
-              type="button"
-              @click="removeCoAuthor(index)"
-              class="ml-2 text-red-500"
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-2">Соавторы</label>
+          <div class="space-y-3">
+            <div
+              v-for="(coAuthor, index) in form.co_authors"
+              :key="index"
+              class="flex items-center gap-3"
             >
-              Удалить
-            </button>
+              <input
+                v-model="form.co_authors[index]"
+                type="text"
+                class="flex-1 px-4 py-3 rounded-xl border border-gray-200 bg-white text-[#1a1a1a] placeholder-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-gray-400"
+                placeholder="Имя соавтора"
+              />
+              <button
+                type="button"
+                @click="removeCoAuthor(index)"
+                class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-all duration-200"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
           </div>
-          <button type="button" @click="addCoAuthor" class="text-blue-500">
+          <button
+            type="button"
+            @click="addCoAuthor"
+            class="mt-3 inline-flex items-center text-sm font-bold text-gray-400 hover:text-black transition-all duration-200"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
             Добавить соавтора
           </button>
         </div>
       </div>
-      <div class="flex justify-end mt-4">
-        <button
-          class="bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-200"
-          type="submit"
+
+      <div class="lg:w-80">
+        <FileUpload
+          :initialFiles="thesis?.media || []"
           :disabled="isSubmitting"
-        >
-          <span v-if="isSubmitting">
-            <svg
-              class="animate-spin h-5 w-5 mr-3 text-white inline-block"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                class="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                stroke-width="4"
-              ></circle>
-              <path
-                class="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-              ></path>
-            </svg>
-            Отправка...
-          </span>
-          <span v-else>{{ isEditMode ? 'Обновить' : 'Создать' }}</span>
-        </button>
+          @files-updated="handleFilesUpdate"
+          @file-removed="handleFileRemove"
+        />
       </div>
-    </form>
-    <div class="flex-1 mb-4 md:ml-4 w-2/5">
-      <FileUpload
-        :initialFiles="thesis?.media || []"
-        :disabled="isSubmitting"
-        @files-updated="handleFilesUpdate"
-        @file-removed="handleFileRemove"
-      />
     </div>
-  </div>
+
+    <div class="flex justify-end mt-10 pt-8 border-t border-gray-100">
+      <button
+        class="px-10 py-4 bg-black text-white rounded-full hover:bg-gray-800 shadow-lg shadow-black/10 transition-all duration-300 font-bold text-base"
+        type="submit"
+        :disabled="isSubmitting"
+      >
+        <span v-if="isSubmitting" class="inline-flex items-center">
+          <svg
+            class="animate-spin h-5 w-5 mr-3 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+          </svg>
+          Отправка...
+        </span>
+        <span v-else>{{ isEditMode ? 'Обновить' : 'Создать' }}</span>
+      </button>
+    </div>
+  </form>
 </template>
 
 <script>
@@ -144,7 +147,7 @@ export default {
           await this.$inertia.post(`/theses/${this.sectionId}/apply`, formData)
         }
       } catch (error) {
-        console.error('Ошибка при отправке формы:', error)
+        console.error(error)
       } finally {
         this.isSubmitting = false
       }
@@ -153,27 +156,19 @@ export default {
       this.newFiles = files.filter((file) => file instanceof File)
     },
     handleFileRemove(fileId) {
-      // Отправляем запрос на удаление файла, если он уже загружен
       this.$inertia
         .delete(`/theses/${this.thesis.id}/media/${fileId}`)
-        .then(() => {
-          // Успешно удалено, можно обновить состояние или уведомить пользователя
-          console.log(`Файл с ID ${fileId} успешно удален.`)
-        })
+        .then(() => {})
         .catch((error) => {
-          console.error(`Ошибка при удалении файла с ID ${fileId}:`, error)
+          console.error(error)
         })
     },
     addCoAuthor() {
-      this.form.co_authors.push('') // Добавляем пустую строку для нового соавтора
+      this.form.co_authors.push('')
     },
     removeCoAuthor(index) {
-      this.form.co_authors.splice(index, 1) // Удаляем соавтора по индексу
+      this.form.co_authors.splice(index, 1)
     },
   },
 }
 </script>
-
-<style scoped>
-/* Добавьте стили для спиннера, если необходимо */
-</style>
