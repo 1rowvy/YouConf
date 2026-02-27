@@ -80,68 +80,65 @@
     </div>
 </template>
 
-<script setup>
-import { ref } from "vue";
-import { Link, router, usePage } from "@inertiajs/vue3";
-import { Inertia } from "@inertiajs/inertia";
+<script>
+import { Link } from '@inertiajs/inertia-vue3'
+import { Inertia } from '@inertiajs/inertia'
 
-const page = usePage();
-
-const isOpen = ref(false);
-const notifications = ref([]);
-
-// Форматирование даты
-const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString();
-};
-
-// Отметить как прочитанное
-const markAsRead = (notification) => {
-    if (!notification.read_at) {
-        router.post(
-            `/notifications/${notification.id}/mark-as-read`,
-            {},
-            {
-                preserveScroll: true,
-                onSuccess: () => {
-                    notification.read_at = new Date().toISOString();
-                    isOpen.value = false;
-                },
-            },
-        );
-    }
-};
-
-const markAllAsRead = () => {
-    if (page.props.unreadNotificationsCount > 0) {
-        router.post(
-            "/notifications/mark-all-as-read",
-            {},
-            {
-                preserveScroll: true,
-                onSuccess: () => {
-                    notifications.value.forEach(
-                        (n) =>
-                            (n.read_at = n.read_at || new Date().toISOString()),
-                    );
-                },
-            },
-        );
-    }
-};
-
-// Переключение dropdown
-const toggleDropdown = () => {
-    isOpen.value = !isOpen.value;
-    if (isOpen.value && notifications.value.length === 0) {
-        Inertia.reload({
-            only: ["notifications"],
-            preserveScroll: true,
-            onSuccess: (page) => {
-                console.log(page);
-                notifications.value = page.props.notifications;
-            },
-        });
-    }
-};
+export default {
+    components: { Link },
+    data() {
+        return {
+            isOpen: false,
+            notifications: [],
+        }
+    },
+    methods: {
+        formatDate(dateString) {
+            return new Date(dateString).toLocaleString()
+        },
+        markAsRead(notification) {
+            if (!notification.read_at) {
+                Inertia.post(
+                    `/notifications/${notification.id}/mark-as-read`,
+                    {},
+                    {
+                        preserveScroll: true,
+                        onSuccess: () => {
+                            notification.read_at = new Date().toISOString()
+                            this.isOpen = false
+                        },
+                    },
+                )
+            }
+        },
+        markAllAsRead() {
+            if (this.$page.props.unreadNotificationsCount > 0) {
+                Inertia.post(
+                    '/notifications/mark-all-as-read',
+                    {},
+                    {
+                        preserveScroll: true,
+                        onSuccess: () => {
+                            this.notifications.forEach(
+                                (n) => (n.read_at = n.read_at || new Date().toISOString()),
+                            )
+                        },
+                    },
+                )
+            }
+        },
+        toggleDropdown() {
+            this.isOpen = !this.isOpen
+            if (this.isOpen && this.notifications.length === 0) {
+                Inertia.reload({
+                    only: ['notifications'],
+                    preserveScroll: true,
+                    onSuccess: (page) => {
+                        this.notifications = page.props.notifications
+                    },
+                })
+            }
+        },
+    },
+}
 </script>
