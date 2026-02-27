@@ -18,7 +18,7 @@
               v-if="message.user.id === $page.props.user_data.id"
               class="flex justify-end"
             >
-              <div class="bg-black text-white rounded-2xl rounded-br-md px-4 py-3 max-w-md">
+              <div class="bg-black text-white rounded-2xl rounded-br-md px-4 py-3 max-w-[80%] sm:max-w-md">
                 <p class="text-sm">{{ message.message }}</p>
                 <span class="text-[10px] text-gray-400 mt-1 block">
                   {{ formatTime(message.created_at) }}
@@ -27,7 +27,7 @@
             </div>
 
             <div v-else class="flex justify-start">
-              <div class="bg-gray-100 text-[#1a1a1a] rounded-2xl rounded-bl-md px-4 py-3 max-w-md">
+              <div class="bg-gray-100 text-[#1a1a1a] rounded-2xl rounded-bl-md px-4 py-3 max-w-[80%] sm:max-w-md">
                 <p class="text-xs font-bold text-gray-400 mb-1">{{ message.user.first_name }}</p>
                 <p class="text-sm">{{ message.message }}</p>
                 <span class="text-[10px] text-gray-400 mt-1 block">

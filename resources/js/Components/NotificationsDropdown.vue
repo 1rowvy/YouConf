@@ -32,7 +32,7 @@
 
         <div
             v-if="isOpen"
-            class="origin-top-right absolute right-0 mt-2 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-[70]"
+            class="origin-top-right absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-[70]"
         >
             <div class="px-4 py-2 border-b flex justify-between items-center">
                 <p class="text-sm font-medium text-gray-700">Уведомления</p>

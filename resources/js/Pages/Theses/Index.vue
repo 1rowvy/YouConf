@@ -3,7 +3,7 @@
     <div class="mb-8">
       <h1 class="text-4xl font-extrabold text-[#1a1a1a] mb-6">Тезисы</h1>
 
-      <div class="flex items-center gap-3">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-3">
         <label for="statusFilter" class="text-sm font-bold text-gray-700">
           Фильтр по статусу:
         </label>

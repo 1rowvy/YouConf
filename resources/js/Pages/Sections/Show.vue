@@ -86,13 +86,13 @@
                 </div>
             </div>
         </div>
-        <div v-if="dateKeys.length > 0" class="flex space-x-2 mb-6 border-b">
+        <div v-if="dateKeys.length > 0" class="flex space-x-2 mb-6 border-b overflow-x-auto scrollbar-hide">
             <button
                 v-for="date in dateKeys"
                 :key="date"
                 @click="selectedDate = date"
                 :class="[
-                    'px-6 py-3 font-bold text-sm transition-all',
+                    'px-4 sm:px-6 py-3 font-bold text-sm transition-all whitespace-nowrap',
                     selectedDate === date
                         ? 'border-b-2 border-blue-600 text-blue-600'
                         : 'text-gray-400 hover:text-gray-600',
