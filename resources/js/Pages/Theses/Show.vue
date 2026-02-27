@@ -8,7 +8,7 @@
       Назад к секции
     </Link>
 
-    <div class="bg-white border border-gray-100 p-8 md:p-12 rounded-[2.5rem] shadow-sm">
+    <div class="bg-white border border-gray-100 p-5 md:p-12 rounded-2xl md:rounded-[2.5rem] shadow-sm">
       <div class="mb-10">
         <div class="mb-6">
           <span
@@ -19,13 +19,13 @@
           </span>
         </div>
 
-        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-[#1a1a1a]">
+        <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight text-[#1a1a1a]">
           {{ thesis.title }}
         </h1>
       </div>
 
       <div class="mb-12">
-        <p class="text-lg md:text-xl text-gray-500 font-medium leading-relaxed">
+        <p class="text-base md:text-lg text-gray-500 font-medium leading-relaxed">
           {{ thesis.description }}
         </p>
       </div>

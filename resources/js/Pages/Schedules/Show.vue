@@ -3,7 +3,7 @@
         <div
             class="flex flex-col md:flex-row items-center justify-between gap-6 mb-12"
         >
-            <h1 class="text-3xl font-extrabold text-[#1a1a1a]">
+            <h1 class="text-2xl md:text-3xl font-extrabold text-[#1a1a1a]">
                 Расписание конференции
             </h1>
 

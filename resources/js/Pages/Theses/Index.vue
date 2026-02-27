@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-7xl mx-auto py-10 px-4">
     <div class="mb-8">
-      <h1 class="text-4xl font-extrabold text-[#1a1a1a] mb-6">Тезисы</h1>
+      <h1 class="text-2xl md:text-4xl font-extrabold text-[#1a1a1a] mb-6">Тезисы</h1>
 
       <div class="flex flex-col sm:flex-row sm:items-center gap-3">
         <label for="statusFilter" class="text-sm font-bold text-gray-700">

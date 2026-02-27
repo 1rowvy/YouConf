@@ -12,7 +12,7 @@
         </Link>
 
         <div
-            class="bg-white border border-gray-100 p-8 md:p-12 rounded-[2.5rem] shadow-sm"
+            class="bg-white border border-gray-100 p-5 md:p-12 rounded-2xl md:rounded-[2.5rem] shadow-sm"
         >
             <div class="mb-10">
                 <div class="mb-6">
@@ -25,14 +25,14 @@
                 </div>
 
                 <h1
-                    class="text-4xl md:text-5xl font-extrabold tracking-tight text-[#1a1a1a]"
+                    class="text-2xl md:text-4xl font-extrabold tracking-tight text-[#1a1a1a]"
                 >
                     {{ section.name }}
                 </h1>
             </div>
 
             <div class="mb-12">
-                <p class="text-lg md:text-xl text-gray-500 font-medium">
+                <p class="text-base md:text-lg text-gray-500 font-medium">
                     {{ section.full_description }}
                 </p>
             </div>

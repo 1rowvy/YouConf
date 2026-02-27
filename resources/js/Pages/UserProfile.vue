@@ -1,26 +1,26 @@
 <template>
   <div class="max-w-4xl mx-auto py-10 px-4">
     <div
-      class="bg-white border border-gray-100 p-8 md:p-12 rounded-[2.5rem] shadow-sm mb-8"
+      class="bg-white border border-gray-100 p-5 md:p-12 rounded-2xl md:rounded-[2.5rem] shadow-sm mb-8"
     >
       <div class="mb-10">
         <h1
-          class="text-4xl md:text-5xl font-extrabold tracking-tight text-[#1a1a1a]"
+          class="text-2xl md:text-4xl font-extrabold tracking-tight text-[#1a1a1a]"
         >
           Информация о пользователе
         </h1>
       </div>
 
       <div class="mb-12 space-y-4">
-        <p class="text-lg md:text-xl text-gray-500">
+        <p class="text-base md:text-lg text-gray-500">
           <strong class="font-bold text-gray-700">Имя:</strong>
           {{ user_data.first_name }}
         </p>
-        <p class="text-lg md:text-xl text-gray-500">
+        <p class="text-base md:text-lg text-gray-500">
           <strong class="font-bold text-gray-700">Фамилия:</strong>
           {{ user_data.last_name }}
         </p>
-        <p v-if="user_data.email" class="text-lg md:text-xl text-gray-500">
+        <p v-if="user_data.email" class="text-base md:text-lg text-gray-500">
           <strong class="font-bold text-gray-700">Email:</strong>
           {{ user_data.email }}
         </p>

@@ -2,7 +2,7 @@
   <div class="max-w-4xl mx-auto py-10 px-4">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
       <div>
-        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-[#1a1a1a]">
+        <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight text-[#1a1a1a]">
           Уведомления
         </h1>
         <p v-if="unreadCount > 0" class="mt-3 text-lg text-gray-400 font-medium">

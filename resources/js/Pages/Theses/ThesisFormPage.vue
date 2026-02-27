@@ -8,9 +8,9 @@
       Назад
     </Link>
 
-    <div class="bg-white border border-gray-100 p-8 md:p-12 rounded-[2.5rem] shadow-sm">
+    <div class="bg-white border border-gray-100 p-5 md:p-12 rounded-2xl md:rounded-[2.5rem] shadow-sm">
       <div class="mb-10">
-        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-[#1a1a1a]">
+        <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight text-[#1a1a1a]">
           {{ isEditMode ? 'Редактировать тезис' : 'Создать тезис' }}
         </h1>
         <p v-if="sectionLabel" class="mt-3 text-lg text-gray-400 font-medium">
