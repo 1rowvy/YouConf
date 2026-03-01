@@ -32,7 +32,7 @@
 
         <div
             v-if="isOpen"
-            class="origin-top-right absolute right-0 mt-2 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-[70]"
+            class="origin-top-right absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-[70]"
         >
             <div class="px-4 py-2 border-b flex justify-between items-center">
                 <p class="text-sm font-medium text-gray-700">Уведомления</p>
@@ -69,77 +69,76 @@
             </div>
 
             <div class="px-4 py-2 border-t">
-                <!-- <Link
-          :href="route('notifications.index')"
-          class="text-sm font-medium text-blue-500 hover:text-blue-700"
-        >
-          Просмотреть все
-        </Link> -->
+                <Link
+                    href="/notifications"
+                    class="text-sm font-medium text-blue-500 hover:text-blue-700"
+                >
+                    Просмотреть все
+                </Link>
             </div>
         </div>
     </div>
 </template>
 
-<script setup>
-import { ref } from "vue";
-import { Link, router } from "@inertiajs/vue3";
-import { Inertia } from "@inertiajs/inertia";
+<script>
+import { Link } from '@inertiajs/inertia-vue3'
+import { Inertia } from '@inertiajs/inertia'
 
-const isOpen = ref(false);
-const notifications = ref([]);
-
-// Форматирование даты
-const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString();
-};
-
-// Отметить как прочитанное
-const markAsRead = (notification) => {
-    if (!notification.read_at) {
-        router.post(
-            route("notifications.markAsRead", notification.id),
-            {},
-            {
-                preserveScroll: true,
-                onSuccess: () => {
-                    notification.read_at = new Date().toISOString();
-                    isOpen.value = false;
-                },
-            },
-        );
-    }
-};
-
-const markAllAsRead = () => {
-    if ($page.props.unreadNotificationsCount > 0) {
-        router.post(
-            route("notifications.markAllAsRead"),
-            {},
-            {
-                preserveScroll: true,
-                onSuccess: () => {
-                    notifications.value.forEach(
-                        (n) =>
-                            (n.read_at = n.read_at || new Date().toISOString()),
-                    );
-                },
-            },
-        );
-    }
-};
-
-// Переключение dropdown
-const toggleDropdown = () => {
-    isOpen.value = !isOpen.value;
-    if (isOpen.value && notifications.value.length === 0) {
-        Inertia.reload({
-            only: ["notifications"],
-            preserveScroll: true,
-            onSuccess: (page) => {
-                console.log(page);
-                notifications.value = page.props.notifications;
-            },
-        });
-    }
-};
+export default {
+    components: { Link },
+    data() {
+        return {
+            isOpen: false,
+            notifications: [],
+        }
+    },
+    methods: {
+        formatDate(dateString) {
+            return new Date(dateString).toLocaleString()
+        },
+        markAsRead(notification) {
+            if (!notification.read_at) {
+                Inertia.post(
+                    `/notifications/${notification.id}/mark-as-read`,
+                    {},
+                    {
+                        preserveScroll: true,
+                        onSuccess: () => {
+                            notification.read_at = new Date().toISOString()
+                            this.isOpen = false
+                        },
+                    },
+                )
+            }
+        },
+        markAllAsRead() {
+            if (this.$page.props.unreadNotificationsCount > 0) {
+                Inertia.post(
+                    '/notifications/mark-all-as-read',
+                    {},
+                    {
+                        preserveScroll: true,
+                        onSuccess: () => {
+                            this.notifications.forEach(
+                                (n) => (n.read_at = n.read_at || new Date().toISOString()),
+                            )
+                        },
+                    },
+                )
+            }
+        },
+        toggleDropdown() {
+            this.isOpen = !this.isOpen
+            if (this.isOpen && this.notifications.length === 0) {
+                Inertia.reload({
+                    only: ['notifications'],
+                    preserveScroll: true,
+                    onSuccess: (page) => {
+                        this.notifications = page.props.notifications
+                    },
+                })
+            }
+        },
+    },
+}
 </script>

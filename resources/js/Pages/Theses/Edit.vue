@@ -1,6 +1,6 @@
 <template>
-  <div class="p-4">
-    <h1 class="text-2xl font-bold mb-4">{{ thesis.title }}</h1>
+  <div class="max-w-4xl mx-auto py-10 px-4">
+    <h1 class="text-2xl sm:text-3xl font-bold mb-4">{{ thesis.title }}</h1>
     <p class="text-gray-600">{{ thesis.description }}</p>
     <p class="text-sm text-gray-500 mt-2">Статус: {{ thesis.status.name }}</p>
     <p class="text-sm text-gray-500 mt-2">Раздел: {{ thesis.section.name }}</p>
@@ -9,7 +9,7 @@
     </p>
 
     <h2 class="text-lg font-semibold mt-4">Связанные файлы:</h2>
-    <div class="grid grid-cols-2 gap-4 mt-2">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
       <div
         v-for="file in thesis.files"
         :key="file.id"

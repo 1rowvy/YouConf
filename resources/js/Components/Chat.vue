@@ -1,41 +1,36 @@
 <template>
-  <div class="mt-8">
-    <div class="bg-white shadow-md rounded-lg p-6">
-      <!-- Окно сообщений -->
-      <div class="overflow-y-auto max-h-64 mb-4">
-        <!-- Блок-заглушка, если сообщений нет -->
-        <div v-if="messages.length === 0" class="text-center text-gray-500">
-          В чате пока нет сообщений.
+  <div>
+    <div class="overflow-y-auto max-h-[50vh] mb-6 space-y-6">
+      <div v-if="messages.length === 0" class="text-center py-12">
+        <p class="text-gray-400 font-medium">Сообщений пока нет</p>
+      </div>
+
+      <div v-for="(group, index) in groupedMessages" :key="index">
+        <div class="flex items-center gap-4 mb-4">
+          <div class="flex-1 h-px bg-gray-100"></div>
+          <span class="text-xs font-bold text-gray-300 uppercase">{{ formatDate(group.date) }}</span>
+          <div class="flex-1 h-px bg-gray-100"></div>
         </div>
 
-        <!-- Список сообщений -->
-        <div v-for="(group, index) in groupedMessages" :key="index">
-          <div class="text-center text-gray-400 mb-2">
-            <strong>{{ formatDate(group.date) }}</strong>
-          </div>
-          <div v-for="message in group.messages" :key="message.id" class="mb-4">
+        <div class="space-y-3">
+          <div v-for="message in group.messages" :key="message.id">
             <div
               v-if="message.user.id === $page.props.user_data.id"
               class="flex justify-end"
             >
-              <div class="bg-blue-500 text-white rounded-lg p-3 max-w-md">
+              <div class="bg-black text-white rounded-2xl rounded-br-md px-4 py-3 max-w-[80%] sm:max-w-md">
                 <p class="text-sm">{{ message.message }}</p>
-                <span class="text-xs text-blue-200">
-                  {{ message.user.first_name }}
-                </span>
-                <span class="text-xs text-blue-200">
+                <span class="text-[10px] text-gray-400 mt-1 block">
                   {{ formatTime(message.created_at) }}
                 </span>
               </div>
             </div>
 
             <div v-else class="flex justify-start">
-              <div class="bg-gray-200 text-gray-800 rounded-lg p-3 max-w-md">
+              <div class="bg-gray-100 text-[#1a1a1a] rounded-2xl rounded-bl-md px-4 py-3 max-w-[80%] sm:max-w-md">
+                <p class="text-xs font-bold text-gray-400 mb-1">{{ message.user.first_name }}</p>
                 <p class="text-sm">{{ message.message }}</p>
-                <span class="text-xs text-gray-500">
-                  {{ message.user.first_name }}
-                </span>
-                <span class="text-xs text-gray-500">
+                <span class="text-[10px] text-gray-400 mt-1 block">
                   {{ formatTime(message.created_at) }}
                 </span>
               </div>
@@ -43,35 +38,23 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <div v-if="isActive" class="flex items-center gap-2">
-        <input
-          v-model="newMessage"
-          @keyup.enter="sendMessage"
-          placeholder="Введите сообщение..."
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <!-- Кнопка отправки -->
-        <button
-          @click="sendMessage"
-          class="p-2 text-blue-500 hover:text-blue-600 focus:outline-none"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-            />
-          </svg>
-        </button>
-      </div>
+    <div v-if="isActive" class="flex items-center gap-3">
+      <input
+        v-model="newMessage"
+        @keyup.enter="sendMessage"
+        placeholder="Введите сообщение..."
+        class="flex-1 px-5 py-3 rounded-full border border-gray-200 bg-white text-sm text-[#1a1a1a] placeholder-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-gray-400"
+      />
+      <button
+        @click="sendMessage"
+        class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-black text-white hover:bg-gray-800 transition-all duration-200"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+        </svg>
+      </button>
     </div>
   </div>
 </template>
@@ -137,10 +120,10 @@ export default {
       return moment
         .utc(date)
         .tz(Intl.DateTimeFormat().resolvedOptions().timeZone)
-        .format('HH:mm') // Форматируем время как HH:mm
+        .format('HH:mm')
     },
     formatDate(date) {
-      return moment(date).format('DD.MM.YY') // Форматируем дату как DD.MM.YY
+      return moment(date).format('DD.MM.YY')
     },
   },
 }
