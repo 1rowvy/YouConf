@@ -4,31 +4,29 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Layouts;
 
-use MoonShine\Laravel\Layouts\CompactLayout;
+use App\MoonShine\Pages\ImportExportPage;
+use App\MoonShine\Resources\LocationResource;
+use App\MoonShine\Resources\ScheduleResource;
+use App\MoonShine\Resources\SectionResource;
+use App\MoonShine\Resources\StaticPageResource;
+use App\MoonShine\Resources\ThesisKanbanResource;
+use App\MoonShine\Resources\ThesisResource;
+use App\MoonShine\Resources\UserResource;
 use MoonShine\ColorManager\ColorManager;
 use MoonShine\Contracts\ColorManager\ColorManagerContract;
-use MoonShine\Laravel\Components\Layout\{Locales, Notifications, Profile, Search};
-use MoonShine\UI\Components\{
-    Layout\Layout,
-};
-use App\MoonShine\Resources\UserResource;
-use MoonShine\MenuManager\MenuItem;
-use App\MoonShine\Resources\ScheduleResource;
-use App\MoonShine\Resources\ThesisResource;
-use App\MoonShine\Resources\LocationResource;
-use MoonShine\UI\Components\Layout\Head;
-use MoonShine\UI\Components\Layout\Footer;
-use MoonShine\UI\Components\Layout\Sidebar;
-use MoonShine\UI\Components\Layout\Logo;
-use MoonShine\UI\Components\Layout\Div;
-use MoonShine\UI\Components\Layout\Burger;
-use MoonShine\UI\Components\Layout\ThemeSwitcher;
-use MoonShine\UI\Components\Layout\Menu;
-use MoonShine\UI\Components\When;
-use App\MoonShine\Resources\ThesisKanbanResource;
-use App\MoonShine\Resources\SectionResource;
+use MoonShine\Laravel\Components\Layout\Profile;
+use MoonShine\Laravel\Layouts\CompactLayout;
 use MoonShine\MenuManager\MenuGroup;
-use App\MoonShine\Resources\StaticPageResource;
+use MoonShine\MenuManager\MenuItem;
+use MoonShine\UI\Components\Layout\Burger;
+use MoonShine\UI\Components\Layout\Div;
+use MoonShine\UI\Components\Layout\Footer;
+use MoonShine\UI\Components\Layout\Layout;
+use MoonShine\UI\Components\Layout\Logo;
+use MoonShine\UI\Components\Layout\Menu;
+use MoonShine\UI\Components\Layout\Sidebar;
+use MoonShine\UI\Components\Layout\ThemeSwitcher;
+use MoonShine\UI\Components\When;
 
 final class MoonShineLayout extends CompactLayout
 {
@@ -53,8 +51,10 @@ final class MoonShineLayout extends CompactLayout
             MenuItem::make('Секции', SectionResource::class),
             // MenuItem::make('Statuses', StatusResource::class),
             MenuItem::make('Пользовательские страницы', StaticPageResource::class),
+            MenuItem::make('Импорт / Экспорт', ImportExportPage::class),
         ];
     }
+
     protected function getFooterComponent(): Footer
     {
         return parent::getFooterComponent()->menu([]);
@@ -96,7 +96,7 @@ final class MoonShineLayout extends CompactLayout
     }
 
     /**
-     * @param ColorManager $colorManager
+     * @param  ColorManager  $colorManager
      */
     protected function colors(ColorManagerContract $colorManager): void
     {

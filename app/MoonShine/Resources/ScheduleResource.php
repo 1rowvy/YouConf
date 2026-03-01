@@ -4,22 +4,19 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Schedule;
 use App\Models\Location;
-
+use App\Models\Schedule;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\ValidationException;
+use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\UI\Components\Layout\Box;
-use MoonShine\UI\Fields\ID;
-use MoonShine\UI\Contracts\UI\FieldContract;
 use MoonShine\UI\Contracts\UI\ComponentContract;
-use MoonShine\UI\Fields\Date;
+use MoonShine\UI\Contracts\UI\FieldContract;
+use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Select;
 use MoonShine\UI\Fields\Text;
-use MoonShine\Laravel\Fields\Relationships\BelongsTo;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Contracts\Database\Eloquent\Builder;
-use Carbon\Carbon;
 
 class ScheduleResource extends ModelResource
 {
@@ -41,10 +38,10 @@ class ScheduleResource extends ModelResource
         return [
             ID::make()->sortable(),
             BelongsTo::make('Заявка', 'thesis', 'title', resource: ThesisResource::class),
-            Text::make('Секция', '', fn($schedule) => $schedule->thesis->section->name),
+            Text::make('Секция', '', fn ($schedule) => $schedule->thesis?->section?->name),
             Text::make('Время начала', 'start_time'),
             Text::make('Продолжительность (мин)', 'duration'),
-            Text::make('Место проведения', '', fn($schedule) => $schedule->location->name),
+            Text::make('Место проведения', '', fn ($schedule) => $schedule->location?->name),
         ];
     }
 
@@ -62,13 +59,14 @@ class ScheduleResource extends ModelResource
             $startTime->addMinutes(15); // Шаг 15 минут
         }
         $scheduledThesisIds = Schedule::pluck('thesis_id')->toArray();
+
         return [
             Box::make([
                 BelongsTo::make('Тезис', 'thesis', 'title', resource: ThesisResource::class)
                     ->required()
                     // ->asyncSearch('title') // Включаем асинхронный поиск
                     ->valuesQuery(
-                        fn($query) => $query
+                        fn ($query) => $query
                             ->where('status_id', 2) // Только принятые заявки
                             ->whereNotIn('id', Schedule::pluck('thesis_id')->filter()->toArray()) // Не в расписании
                     ),
@@ -106,7 +104,7 @@ class ScheduleResource extends ModelResource
             Schedule::where('thesis_id', $item->thesis_id)->exists()
         ) {
             throw ValidationException::withMessages([
-                'thesis' => 'Можно выбирать только принятые заявки, которых нет в расписании'
+                'thesis' => 'Можно выбирать только принятые заявки, которых нет в расписании',
             ]);
         }
 
@@ -127,7 +125,7 @@ class ScheduleResource extends ModelResource
 
         if ($conflictingSchedules) {
             throw ValidationException::withMessages([
-                'start_time' => 'Расписание пересекается с другим мероприятием в этой секции'
+                'start_time' => 'Расписание пересекается с другим мероприятием в этой секции',
             ]);
         }
     }

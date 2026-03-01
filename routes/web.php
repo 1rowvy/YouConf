@@ -1,19 +1,17 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\FileController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\QuillUploadController;
+use App\Http\Controllers\SectionController;
+use App\Http\Controllers\StaticPageController;
+use App\Http\Controllers\ThesisController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Socialite\Facades\Socialite;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\NotificationController;
-
-use App\Http\Controllers\SectionController;
-use App\Http\Controllers\ThesisController;
-use App\Http\Controllers\ChatController;
-use App\Http\Controllers\StaticPageController;
-use App\Http\Controllers\FileController;
-use App\Http\Controllers\QuillUploadController;
-
 
 Route::get('/about', function () {
     return Inertia::render('About');
@@ -56,7 +54,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/chats/{chat}/messages', [ChatController::class, 'storeMessage']);
 
     Route::post('/theses/{thesis}/files', [FileController::class, 'store']);
-    ////Route::delete('/theses/{thesis}/media/{media}', [FileController::class, 'destroy']);
+    // //Route::delete('/theses/{thesis}/media/{media}', [FileController::class, 'destroy']);
 });
 
 Route::get('/', [StaticPageController::class, 'show'])
@@ -73,7 +71,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/sections/{section}/register', [SectionRegistrationController::class, 'toggle'])->name('sections.register');
 });
 
-
 // routes/web.php
 
 if (app()->environment('local')) {
@@ -86,10 +83,19 @@ Route::get('/schedules', [ScheduleController::class, 'show'])->name('schedules.s
 
 Route::get('/schedules/section/{sectionId}', [ScheduleController::class, 'getThesesBySection']);
 
-
 Route::post('/quill/upload', [QuillUploadController::class, 'upload'])
     ->name('moonshine.quill.upload');
 
+use App\Http\Controllers\Admin\ImportExportController;
+
+Route::prefix('admin')->middleware(config('moonshine.middleware'))->group(function () {
+    Route::middleware(config('moonshine.auth.middleware'))->group(function () {
+        Route::get('/import-export/export-all', [ImportExportController::class, 'exportAll'])
+            ->name('admin.export.all');
+        Route::post('/import-export/import-all', [ImportExportController::class, 'importAll'])
+            ->name('admin.import.all');
+    });
+});
 
 Route::get('/{slug}', [StaticPageController::class, 'show'])
     ->name('static-pages.show');
