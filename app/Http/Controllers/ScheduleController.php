@@ -10,30 +10,9 @@ class ScheduleController extends Controller
 {
     public function show()
     {
-        $schedules = Schedule::with(['thesis.section'])->get();
         $sections = Section::all();
 
-        $formattedSchedules = $schedules->map(function ($schedule) {
-            return [
-                'id' => $schedule->id,
-                'thesis_id' => $schedule->thesis_id,
-                'start_time' => $schedule->start_time,
-                'duration' => $schedule->duration,
-                'end_time' => $schedule->end_time,
-                'location' => $schedule->location,
-                'thesis_title' => $schedule->thesis->title,
-                'section_id' => $schedule->thesis->section_id,
-                'user' => [
-                    'first_name' => $schedule->thesis->user->first_name,
-                    'last_name' => $schedule->thesis->user->last_name,
-                ],
-            ];
-        });
-
-        $sortedSchedules = $formattedSchedules->groupBy('date');
-
         return Inertia::render('Schedules/Show', [
-            'schedules' => $sortedSchedules,
             'sections' => $sections,
         ]);
     }

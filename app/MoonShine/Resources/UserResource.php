@@ -74,7 +74,8 @@ class UserResource extends ModelResource
                     ->default(fn($user) => $user->exists ? $user->sections->pluck('id')->toArray() : [])
                     // Обработка сохранения
                     ->onApply(function ($user, $value) {
-                        $user->sections()->sync($value ?? []);
+                        $ids = array_values(array_filter((array) ($value ?? []), fn($v) => (int) $v > 0));
+                        $user->sections()->sync($ids);
                     })
                     ->disabled(function () {
                         $id = $this->getItemID();
