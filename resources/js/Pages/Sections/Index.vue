@@ -279,7 +279,7 @@
 
 <script>
 import { useForm, Link } from "@inertiajs/inertia-vue3";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 export default {
     components: {
@@ -302,6 +302,10 @@ export default {
         });
 
         const modalSectionId = ref(null);
+
+        watch(modalSectionId, (val) => {
+            document.body.style.overflow = val !== null ? 'hidden' : '';
+        });
 
         const statusClasses = {
             planned: "bg-orange-50 text-orange-600",
