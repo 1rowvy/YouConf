@@ -10,25 +10,6 @@
         <form @submit.prevent="submit" class="space-y-4">
             <div class="grid gap-2">
                 <div class="grid gap-1">
-                    <label class="sr-only" for="first_name">Имя</label>
-                    <input
-                        id="first_name"
-                        v-model="form.first_name"
-                        placeholder="Имя"
-                        type="text"
-                        required
-                        class="flex h-10 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        :class="{ 'border-red-500': errors.first_name }"
-                    />
-                    <p
-                        v-if="errors.first_name"
-                        class="text-[0.8rem] font-medium text-red-500"
-                    >
-                        {{ errors.first_name[0] }}
-                    </p>
-                </div>
-
-                <div class="grid gap-1">
                     <label class="sr-only" for="last_name">Фамилия</label>
                     <input
                         id="last_name"
@@ -48,11 +29,30 @@
                 </div>
 
                 <div class="grid gap-1">
+                    <label class="sr-only" for="first_name">Имя</label>
+                    <input
+                        id="first_name"
+                        v-model="form.first_name"
+                        placeholder="Имя"
+                        type="text"
+                        required
+                        class="flex h-10 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        :class="{ 'border-red-500': errors.first_name }"
+                    />
+                    <p
+                        v-if="errors.first_name"
+                        class="text-[0.8rem] font-medium text-red-500"
+                    >
+                        {{ errors.first_name[0] }}
+                    </p>
+                </div>
+
+                <div class="grid gap-1">
                     <label class="sr-only" for="patronymic">Отчество</label>
                     <input
                         id="patronymic"
                         v-model="form.patronymic"
-                        placeholder="Отчество (необязательно)"
+                        placeholder="Отчество (при наличии)"
                         type="text"
                         class="flex h-10 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         :class="{ 'border-red-500': errors.patronymic }"

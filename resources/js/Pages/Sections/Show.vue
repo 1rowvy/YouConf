@@ -222,7 +222,7 @@
 
         <!-- Модальное окно анкеты -->
         <div
-            v-if="modalSectionId !== null"
+            v-if="showModal !== false"
             class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
             @click.self="closeModal"
         >
@@ -267,7 +267,7 @@
                             >Номер телефона</label
                         >
                         <input
-                            v-model="form.phone_nubmer"
+                            v-model="form.phone_number"
                             type="text"
                             placeholder="+79999999999"
                             class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -426,8 +426,23 @@ export default {
                 });
                 return;
             }
-            form.reset();
+            clearForm();
+            console.log(form);
             showModal.value = true;
+        };
+
+        const clearForm = () => {
+            form.reset();
+            form.clearErrors();
+
+            form.degree_type = "";
+            form.course = "";
+            form.group_number = "";
+            form.topic = "";
+            form.supervisor = "";
+            form.co_author = "";
+            form.description = "";
+            form.phone_number = "";
         };
 
         const closeModal = () => {
