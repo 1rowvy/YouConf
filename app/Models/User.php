@@ -23,12 +23,6 @@ class User extends Authenticatable
         'password'
     ];
 
-    // protected $appends = [
-    //     'role_id',
-    //     'unread_notifications_count',
-    //     'full_name'
-    // ];
-
     public function getRoleIdAttribute()
     {
         return $this->roles->first()?->id;

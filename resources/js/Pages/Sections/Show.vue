@@ -31,10 +31,49 @@
                 </h1>
             </div>
 
-            <div class="mb-12">
+            <div class="mb-8">
                 <p class="text-base md:text-lg text-gray-500 font-medium">
                     {{ section.full_description }}
                 </p>
+            </div>
+
+            <div class="mb-10 flex flex-col sm:flex-row gap-6">
+                <div v-if="section.start_date || section.end_date" class="flex items-start gap-3">
+                    <div class="mt-0.5 text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">Даты проведения</p>
+                        <p class="text-sm font-semibold text-gray-800">
+                            {{ section.start_date }}{{ section.end_date && section.end_date !== section.start_date ? ' — ' + section.end_date : '' }}
+                        </p>
+                    </div>
+                </div>
+                <div v-if="section.leaders" class="flex items-start gap-3">
+                    <div class="mt-0.5 text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">Руководители</p>
+                        <p class="text-sm font-semibold text-gray-800">{{ section.leaders }}</p>
+                    </div>
+                </div>
+                <div v-if="section.location_name" class="flex items-start gap-3">
+                    <div class="mt-0.5 text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">Аудитория</p>
+                        <p class="text-sm font-semibold text-gray-800">{{ section.location_name }}</p>
+                    </div>
+                </div>
             </div>
 
             <div
@@ -42,7 +81,7 @@
             >
                 <template v-if="section.can_registration">
                     <button
-                        @click="toggleRegistration"
+                        @click="handleRegisterClick"
                         :class="
                             section.is_joined
                                 ? 'bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600'
@@ -86,6 +125,7 @@
                 </div>
             </div>
         </div>
+
         <div v-if="dateKeys.length > 0" class="flex space-x-2 mb-6 border-b overflow-x-auto scrollbar-hide">
             <button
                 v-for="date in dateKeys"
@@ -111,6 +151,97 @@
                 В этот день выступлений не запланировано.
             </p>
         </div>
+
+        <!-- Модальное окно анкеты -->
+        <div
+            v-if="showModal"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+            @click.self="closeModal"
+        >
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
+                <h2 class="text-xl font-extrabold text-gray-900 mb-1">Регистрация на секцию</h2>
+                <p class="text-sm text-gray-400 mb-6">Поля необязательны, но помогут организаторам подготовиться.</p>
+
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Уровень обучения</label>
+                            <select
+                                v-model="form.degree_type"
+                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                            >
+                                <option value="">—</option>
+                                <option value="bachelor">Бакалавр</option>
+                                <option value="magistrant">Магистрант</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Курс</label>
+                            <input
+                                v-model="form.course"
+                                type="number"
+                                min="1"
+                                max="6"
+                                placeholder="1–6"
+                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Номер группы</label>
+                        <input
+                            v-model="form.group_number"
+                            type="text"
+                            placeholder="Например: 2-ИВТ-41"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Примерная тема</label>
+                        <input
+                            v-model="form.topic"
+                            type="text"
+                            placeholder="Например: Влияние ИИ на образование"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Руководитель</label>
+                        <input
+                            v-model="form.supervisor"
+                            type="text"
+                            placeholder="ФИО научного руководителя"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Соавтор</label>
+                        <input
+                            v-model="form.co_author"
+                            type="text"
+                            placeholder="ФИО соавтора (если есть)"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+                </div>
+
+                <div class="flex gap-3 mt-8">
+                    <button
+                        @click="closeModal"
+                        class="flex-1 py-3 rounded-full border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-all"
+                    >
+                        Отмена
+                    </button>
+                    <button
+                        @click="submitRegistration"
+                        :disabled="form.processing"
+                        class="flex-1 py-3 rounded-full bg-black text-white text-sm font-semibold hover:bg-gray-800 transition-all disabled:opacity-50"
+                    >
+                        Зарегистрироваться
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -119,6 +250,7 @@ import { Link, useForm } from "@inertiajs/inertia-vue3";
 import ScheduleTable from "@/Components/ScheduleTable.vue";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
+import { ref } from "vue";
 
 export default {
     components: { Link, ScheduleTable },
@@ -146,7 +278,16 @@ export default {
         },
     },
     setup(props) {
-        const form = useForm({});
+        const form = useForm({
+            degree_type: '',
+            course: '',
+            group_number: '',
+            topic: '',
+            supervisor: '',
+            co_author: '',
+        });
+
+        const showModal = ref(false);
 
         const statusClasses = {
             planned: "bg-orange-50 text-orange-600",
@@ -155,17 +296,35 @@ export default {
             finished: "bg-gray-100 text-gray-400",
         };
 
-        const toggleRegistration = () => {
+        const handleRegisterClick = () => {
             if (!props.user) {
                 window.location.href = "/login";
                 return;
             }
+            if (props.section.is_joined) {
+                form.post(`/sections/${props.section.id}/register`, {
+                    preserveScroll: true,
+                });
+                return;
+            }
+            form.reset();
+            showModal.value = true;
+        };
+
+        const closeModal = () => {
+            showModal.value = false;
+        };
+
+        const submitRegistration = () => {
             form.post(`/sections/${props.section.id}/register`, {
                 preserveScroll: true,
+                onSuccess: () => {
+                    showModal.value = false;
+                },
             });
         };
 
-        return { statusClasses, toggleRegistration };
+        return { statusClasses, form, showModal, handleRegisterClick, closeModal, submitRegistration };
     },
 };
 </script>

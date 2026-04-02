@@ -23,7 +23,6 @@ use App\MoonShine\Components\CustomKanban;
 use Carbon\Carbon;
 use MoonShine\UI\Fields\Select;
 use MoonShine\UI\Fields\Date;
-use App\Models\Location;
 
 /**
  * @extends ModelResource<ThesisKanban>
@@ -80,7 +79,6 @@ class ThesisKanbanResource extends KanBanResource
     protected function indexFields(): iterable
     {
         return [
-            // ID::make()->sortable(),
             Text::make('Название', 'title')
                 ->required(),
 
@@ -111,10 +109,6 @@ class ThesisKanbanResource extends KanBanResource
                     ->options($this->getTimeOptions())
                     ->required(),
 
-                Select::make('Место проведения', 'location_id')
-                    ->options(Location::pluck('name', 'id')->toArray())
-                    ->required()
-                    ->searchable(),
             ])
         ];
     }

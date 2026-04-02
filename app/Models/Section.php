@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\SectionStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Section extends Model
 {
@@ -14,12 +15,16 @@ class Section extends Model
         'status',
         'description',
         'full_description',
+        'leaders',
         'start_date',
         'end_date',
+        'location_id',
     ];
 
     protected $casts = [
         'status' => SectionStatus::class,
+        'start_date' => 'date',
+        'end_date' => 'date',
     ];
 
     public function canRegistration(): bool
@@ -37,6 +42,11 @@ class Section extends Model
         return $this->users()->where('user_id', $user->id)->exists();
     }
 
+    public function location(): BelongsTo
+    {
+        return $this->belongsTo(Location::class);
+    }
+
     public function theses()
     {
         return $this->hasMany(Thesis::class);
@@ -44,6 +54,8 @@ class Section extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)
+            ->withPivot(['topic', 'supervisor', 'co_author', 'degree_type', 'course', 'group_number'])
+            ->withTimestamps();
     }
 }

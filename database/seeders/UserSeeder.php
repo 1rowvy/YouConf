@@ -41,8 +41,11 @@ class UserSeeder extends Seeder
         $participants = User::factory()
             ->count(5)
             ->create()
-            ->each(function ($user) use ($participantRole) {
+            ->each(function ($user) use ($participantRole, $sections) {
                 $user->assignRole($participantRole);
+                $user->sections()->attach(
+                    $sections->random(rand(1, 2))->pluck('id')->toArray()
+                );
             });
 
         $expertUser = User::create([

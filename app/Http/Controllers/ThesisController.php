@@ -36,9 +36,6 @@ class ThesisController extends Controller
                 ->with(['section', 'user', 'status'])
                 ->get();
         }
-        // else {
-        //     $theses = Thesis::with(['section', 'user', 'status'])->get();
-        // }
 
         return inertia('Theses/Index', [
             'theses' => $theses,

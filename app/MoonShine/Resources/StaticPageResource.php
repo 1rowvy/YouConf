@@ -13,7 +13,6 @@ use App\MoonShine\Components\QuillEditor;
 use MoonShine\UI\Fields\ID;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\EasyMde\Fields\Markdown;
 use MoonShine\UI\Fields\Text;
 
 /**
@@ -52,7 +51,6 @@ class StaticPageResource extends ModelResource
                         return $item && $item->id === 1;
                     }),
                 Text::make('Title')->required(),
-                // Markdown::make('markdown_content')->required(),
                 QuillEditor::make('markdown_content')
             ])
         ];

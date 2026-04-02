@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Thesis;
 use App\Models\Schedule;
-use App\Models\Location;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Validation\ValidationException;
@@ -21,13 +20,11 @@ class ConferenceSessionSeeder extends Seeder
         }
 
         $theses = Thesis::with('section')->where('status_id', 2)->get();
-        $locations = Location::all();
 
         $durations = [15, 30, 45, 60];
 
         // Проходим по каждой заявке
         foreach ($theses as $thesis) {
-            $location = $locations->random();
 
             $section = $thesis->section;
 
@@ -84,7 +81,6 @@ class ConferenceSessionSeeder extends Seeder
                     'date'        => $date->format('Y-m-d'),
                     'duration' => $duration,
                     'end_time' => $end_time->format('H:i'),
-                    'location_id' => $location->id,
                 ]);
             } catch (ValidationException $e) {
                 // Логируем ошибку и продолжаем выполнение

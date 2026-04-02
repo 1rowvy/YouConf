@@ -18,7 +18,6 @@ class Schedule extends Model
         'start_time',
         'duration',
         'end_time',
-        'location_id',
         'event_type',
         'title',
         'description'
@@ -54,11 +53,6 @@ class Schedule extends Model
     public function thesis()
     {
         return $this->belongsTo(Thesis::class);
-    }
-
-    public function location()
-    {
-        return $this->belongsTo(Location::class);
     }
 
     protected static function booted()

@@ -14,7 +14,6 @@ use App\MoonShine\Resources\ThesisResource;
 use App\MoonShine\Resources\UserResource;
 use MoonShine\ColorManager\ColorManager;
 use MoonShine\Contracts\ColorManager\ColorManagerContract;
-use MoonShine\Laravel\Components\Layout\Profile;
 use MoonShine\Laravel\Layouts\CompactLayout;
 use MoonShine\MenuManager\MenuGroup;
 use MoonShine\MenuManager\MenuItem;
@@ -22,11 +21,9 @@ use MoonShine\UI\Components\Layout\Burger;
 use MoonShine\UI\Components\Layout\Div;
 use MoonShine\UI\Components\Layout\Footer;
 use MoonShine\UI\Components\Layout\Layout;
-use MoonShine\UI\Components\Layout\Logo;
 use MoonShine\UI\Components\Layout\Menu;
 use MoonShine\UI\Components\Layout\Sidebar;
 use MoonShine\UI\Components\Layout\ThemeSwitcher;
-use MoonShine\UI\Components\When;
 
 final class MoonShineLayout extends CompactLayout
 {
@@ -40,7 +37,6 @@ final class MoonShineLayout extends CompactLayout
     protected function menu(): array
     {
         return [
-            // ...parent::menu(),
             MenuItem::make('Пользователи', UserResource::class),
             MenuGroup::make('Расписание', [
                 MenuItem::make('Таблица', ScheduleResource::class),
@@ -49,7 +45,6 @@ final class MoonShineLayout extends CompactLayout
             MenuItem::make('Тезисы', ThesisResource::class),
             MenuItem::make('Аудитории', LocationResource::class),
             MenuItem::make('Секции', SectionResource::class),
-            // MenuItem::make('Statuses', StatusResource::class),
             MenuItem::make('Пользовательские страницы', StaticPageResource::class),
             MenuItem::make('Импорт / Экспорт', ImportExportPage::class),
         ];
@@ -64,10 +59,6 @@ final class MoonShineLayout extends CompactLayout
     {
         return Sidebar::make([
             Div::make([
-                // Div::make([
-                //     $this->getLogoComponent()->minimized(),
-                // ])->class('menu-heading-logo'),
-
                 Div::make([
                     ThemeSwitcher::make(),
 
@@ -79,10 +70,6 @@ final class MoonShineLayout extends CompactLayout
 
             Div::make([
                 Menu::make(),
-                // When::make(
-                //     fn(): bool => $this->isAuthEnabled(),
-                //     static fn(): array => [Profile::make(withBorder: true)],
-                // ),
             ])->customAttributes([
                 'class' => 'menu',
                 ':class' => "asideMenuOpen && '_is-opened'",
@@ -101,8 +88,6 @@ final class MoonShineLayout extends CompactLayout
     protected function colors(ColorManagerContract $colorManager): void
     {
         parent::colors($colorManager);
-
-        // $colorManager->primary('#00000');
     }
 
     public function build(): Layout
