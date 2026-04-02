@@ -8,7 +8,7 @@ use App\Models\StaticPage;
 
 class StaticPageController extends Controller
 {
-    public function show($slug)
+    public function show($slug = '')
     {
         $page = StaticPage::where('slug', $slug)->firstOrFail();
 

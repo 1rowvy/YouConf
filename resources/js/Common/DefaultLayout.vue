@@ -22,17 +22,23 @@
                     <template v-if="$page.props?.user_data">
                         <Link
                             :href="'/user/' + $page.props.user_data.id"
-                            class="flex items-center bg-white border border-gray-200 py-1.5 pl-1.5 pr-4 rounded-full hover:shadow-md transition-all"
+                            class="flex items-center justify-center bg-white border border-gray-200 py-1.5 pl-1.5 pr-4 rounded-full hover:shadow-md transition-all"
                         >
                             <!-- <img
                                 :src="$page.props?.user_data?.avatar"
                                 alt="Avatar"
                                 class="h-7 w-7 rounded-full object-cover mr-2"
                             /> -->
-                            <span class="text-sm font-semibold">{{
-                                $page.props?.user_data?.first_name
-                            }}</span>
+                            <p class="text-sm font-semibold">
+                                {{ $page.props?.user_data?.first_name }}
+                            </p>
                         </Link>
+                        <button
+                            @click="logout"
+                            class="text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 px-4 py-2 rounded-full transition-all"
+                        >
+                            Выйти
+                        </button>
                     </template>
                     <template v-else>
                         <a
@@ -59,7 +65,11 @@
                         stroke-width="2"
                         viewBox="0 0 24 24"
                     >
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M4 6h16M4 12h16M4 18h16"
+                        />
                     </svg>
                     <!-- Close icon -->
                     <svg
@@ -70,7 +80,11 @@
                         stroke-width="2"
                         viewBox="0 0 24 24"
                     >
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 18L18 6M6 6l12 12"
+                        />
                     </svg>
                 </button>
             </div>
@@ -119,6 +133,13 @@
                         >
                             Тезисы
                         </a>
+                        <a
+                            v-if="$page.props?.role === 'expert'"
+                            href="/participants"
+                            class="block px-4 py-2.5 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition-all"
+                        >
+                            Участники
+                        </a>
 
                         <!-- Divider -->
                         <hr class="border-gray-100 !my-3" />
@@ -134,18 +155,42 @@
                                         $page.props?.user_data?.first_name
                                     }}</span>
                                 </Link>
+                                <button
+                                    @click="logout"
+                                    class="text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 px-4 py-2 rounded-full transition-all"
+                                >
+                                    Выйти
+                                </button>
                                 <Link
                                     href="/notifications"
                                     class="relative p-2 rounded-full hover:bg-gray-100 transition-all"
                                 >
-                                    <svg class="w-6 h-6 text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5.365V3m0 2.365a5.338 5.338 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175 0 .593 0 1.292-.538 1.292H5.538C5 18 5 17.301 5 16.708c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.338 5.338 0 0 1 12 5.365ZM8.733 18c.094.852.306 1.54.944 2.112a3.48 3.48 0 0 0 4.646 0c.638-.572 1.236-1.26 1.33-2.112h-6.92Z" />
+                                    <svg
+                                        class="w-6 h-6 text-black"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 5.365V3m0 2.365a5.338 5.338 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175 0 .593 0 1.292-.538 1.292H5.538C5 18 5 17.301 5 16.708c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.338 5.338 0 0 1 12 5.365ZM8.733 18c.094.852.306 1.54.944 2.112a3.48 3.48 0 0 0 4.646 0c.638-.572 1.236-1.26 1.33-2.112h-6.92Z"
+                                        />
                                     </svg>
                                     <span
-                                        v-if="$page.props.unreadNotificationsCount > 0"
+                                        v-if="
+                                            $page.props
+                                                .unreadNotificationsCount > 0
+                                        "
                                         class="absolute top-0 right-0 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center"
                                     >
-                                        {{ $page.props.unreadNotificationsCount }}
+                                        {{
+                                            $page.props.unreadNotificationsCount
+                                        }}
                                     </span>
                                 </Link>
                             </template>
@@ -201,6 +246,13 @@
                 >
                     Тезисы
                 </a>
+                <a
+                    v-if="$page.props?.role === 'expert'"
+                    href="/participants"
+                    class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-all"
+                >
+                    Участники
+                </a>
             </div>
         </nav>
 
@@ -255,6 +307,9 @@ export default {
         },
         switchUser(userId) {
             this.$inertia.visit(`/switch-user/${userId}`);
+        },
+        logout() {
+            this.$inertia.post("/logout");
         },
     },
     watch: {

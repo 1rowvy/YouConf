@@ -52,6 +52,7 @@ class UserController extends Controller
             $validated = $request->validate([
                 'first_name' => 'required|string|alpha|max:255',
                 'last_name' => 'required|string|alpha|max:255',
+                'patronymic' => 'nullable|string|alpha|max:255',
             ]);
             $user = User::findOrFail($id);
             $user->update($validated);

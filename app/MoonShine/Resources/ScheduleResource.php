@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
-use App\Models\Location;
 use App\Models\Schedule;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -41,7 +40,6 @@ class ScheduleResource extends ModelResource
             Text::make('Секция', '', fn ($schedule) => $schedule->thesis?->section?->name),
             Text::make('Время начала', 'start_time'),
             Text::make('Продолжительность (мин)', 'duration'),
-            Text::make('Место проведения', '', fn ($schedule) => $schedule->location?->name),
         ];
     }
 
@@ -81,10 +79,6 @@ class ScheduleResource extends ModelResource
                         60 => '60 минут',
                     ])
                     ->required(),
-                Select::make('Место проведения', 'location_id')
-                    ->options(Location::pluck('name', 'id')->toArray())
-                    ->required()
-                    ->searchable(),
             ]),
         ];
     }

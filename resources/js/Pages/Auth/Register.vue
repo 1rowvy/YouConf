@@ -48,6 +48,24 @@
                 </div>
 
                 <div class="grid gap-1">
+                    <label class="sr-only" for="patronymic">Отчество</label>
+                    <input
+                        id="patronymic"
+                        v-model="form.patronymic"
+                        placeholder="Отчество (необязательно)"
+                        type="text"
+                        class="flex h-10 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        :class="{ 'border-red-500': errors.patronymic }"
+                    />
+                    <p
+                        v-if="errors.patronymic"
+                        class="text-[0.8rem] font-medium text-red-500"
+                    >
+                        {{ errors.patronymic[0] }}
+                    </p>
+                </div>
+
+                <div class="grid gap-1">
                     <label class="sr-only" for="email">Email</label>
                     <input
                         id="email"
@@ -159,6 +177,7 @@ export default {
         const form = useForm({
             first_name: "",
             last_name: "",
+            patronymic: "",
             email: "",
             password: "",
             password_confirmation: "",

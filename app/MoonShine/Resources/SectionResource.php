@@ -13,6 +13,7 @@ use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\ID;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
 use MoonShine\UI\Fields\Text;
 use MoonShine\UI\Components\ActionButton;
@@ -55,6 +56,7 @@ class SectionResource extends ModelResource
             Text::make('Описание', 'description')->required(),
             Text::make('Полное описание', 'full_description')->required(),
 
+            BelongsTo::make('Аудитория', 'location', resource: LocationResource::class)->nullable(),
             BelongsToMany::make('Участиники', 'users', resource: UserResource::class)->onlyCount(),
         ];
     }
@@ -74,11 +76,13 @@ class SectionResource extends ModelResource
 
                 Text::make('Описание', 'description'),
                 Text::make('Полное описание', 'full_description'),
+                Text::make('Председатели', 'chairs'),
 
                 Date::make('Дата начала', 'start_date')->required(),
                 Date::make('Дата окончания', 'end_date')->required(),
 
-                ]),
+                BelongsTo::make('Аудитория', 'location', resource: LocationResource::class)->nullable(),
+            ]),
         ];
     }
 

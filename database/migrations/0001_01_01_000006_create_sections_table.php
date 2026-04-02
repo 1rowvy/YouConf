@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description');
-            $table->text('full_description');
+            $table->text('description')->nullable();
+            $table->text('full_description')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();

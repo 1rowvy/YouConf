@@ -26,6 +26,7 @@ class RegisterController extends Controller
             $validated = $request->validate([
                 'first_name' => 'required|string|alpha|max:255',
                 'last_name' => 'required|string|alpha|max:255',
+                'patronymic' => 'nullable|string|alpha|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:8|confirmed',
             ]);
@@ -33,6 +34,7 @@ class RegisterController extends Controller
             $user = User::create([
                 'first_name' => $validated['first_name'],
                 'last_name' => $validated['last_name'],
+                'patronymic' => $validated['patronymic'] ?? null,
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
             ]);
