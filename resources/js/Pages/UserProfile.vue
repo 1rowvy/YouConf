@@ -14,12 +14,16 @@
 
             <div class="space-y-4">
                 <p class="text-base md:text-lg text-gray-500">
+                    <strong class="font-bold text-gray-700">Фамилия:</strong>
+                    {{ user_data.last_name }}
+                </p>
+                <p class="text-base md:text-lg text-gray-500">
                     <strong class="font-bold text-gray-700">Имя:</strong>
                     {{ user_data.first_name }}
                 </p>
-                <p class="text-base md:text-lg text-gray-500">
-                    <strong class="font-bold text-gray-700">Фамилия:</strong>
-                    {{ user_data.last_name }}
+                <p v-if="user_data.patronymic" class="text-base md:text-lg text-gray-500">
+                    <strong class="font-bold text-gray-700">Отчество:</strong>
+                    {{ user_data.patronymic }}
                 </p>
                 <p
                     v-if="user_data.email"
@@ -161,6 +165,8 @@ export default {
             sectionStatusClasses: {
                 planned: "bg-orange-50 text-orange-600",
                 registration: "bg-blue-50 text-blue-600",
+                thesis_submission: "bg-purple-50 text-purple-600",
+                thesis_review: "bg-amber-50 text-amber-600",
                 ongoing: "bg-emerald-50 text-emerald-700",
                 finished: "bg-gray-100 text-gray-400",
             },

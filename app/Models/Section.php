@@ -15,7 +15,7 @@ class Section extends Model
         'status',
         'description',
         'full_description',
-        'leaders',
+        'chairs',
         'start_date',
         'end_date',
         'location_id',
@@ -32,8 +32,9 @@ class Section extends Model
         return $this->status === SectionStatus::REGISTRATION;
     }
 
-    public function canCreateThesis(): bool {
-        return $this->status === SectionStatus::ONGOING;
+    public function canCreateThesis(): bool
+    {
+        return $this->status === SectionStatus::THESIS_SUBMISSION;
     }
 
     public function hasParticipant(?User $user): bool
@@ -55,7 +56,7 @@ class Section extends Model
     public function users()
     {
         return $this->belongsToMany(User::class)
-            ->withPivot(['topic', 'supervisor', 'co_author', 'degree_type', 'course', 'group_number'])
+            ->withPivot(['topic', 'supervisor', 'co_author', 'degree_type', 'course', 'group_number', 'phone_number', 'description'])
             ->withTimestamps();
     }
 }

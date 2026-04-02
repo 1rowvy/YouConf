@@ -31,7 +31,7 @@ class StaticPageResource extends ModelResource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Slug')->required(),
+            Text::make('Slug'),
             Text::make('Title')->required(),
         ];
     }
@@ -45,7 +45,7 @@ class StaticPageResource extends ModelResource
             Box::make([
                 ID::make()->sortable(),
                 Text::make('Slug')
-                    ->required()
+                    ->nullable()
                     ->readonly(function () {
                         $item = $this->getItem();
                         return $item && $item->id === 1;

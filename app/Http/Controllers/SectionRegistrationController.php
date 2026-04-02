@@ -24,10 +24,12 @@ class SectionRegistrationController extends Controller
         $request->validate([
             'topic'        => 'nullable|string|max:255',
             'supervisor'   => 'nullable|string|max:255',
-            'co_author'    => 'nullable|string|max:255',
+            'co_author'    => 'nullable|string|max:1000',
             'degree_type'  => 'nullable|in:bachelor,magistrant',
-            'course'       => 'nullable|integer|min:1|max:6',
+            'course'       => 'nullable|integer|min:1|max:5',
             'group_number' => 'nullable|string|max:50',
+            'description'  => 'nullable|string|max:1000',
+            'phone_number' => 'nullable|string|max:12'
         ]);
 
         $section->users()->attach($user->id, [
@@ -37,6 +39,8 @@ class SectionRegistrationController extends Controller
             'degree_type'  => $request->degree_type,
             'course'       => $request->course,
             'group_number' => $request->group_number,
+            'description'  => $request->description,
+            'phone_number' => $request->phone_number,
         ]);
 
         return back()->with('success', 'Вы зарегистрированы');

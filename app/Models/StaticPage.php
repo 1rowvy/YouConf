@@ -17,6 +17,11 @@ class StaticPage extends Model
         'markdown_content',
     ];
 
+    public function setSlugAttribute($value): void
+    {
+        $this->attributes['slug'] = $value ?? '';
+    }
+
     public function getHtmlContentAttribute()
     {
         return app(MarkdownRenderer::class)->toHtml($this->markdown_content);

@@ -43,6 +43,7 @@ class SectionController extends Controller
             'status' => $section->status->value,
             'status_label' => $section->status->label(),
             'can_registration' => $section->canRegistration(),
+            'can_create_thesis' => $section->canCreateThesis(),
             'is_joined' => $section->hasParticipant($user),
             'start_date' => $section->start_date?->format('d.m.Y'),
             'end_date' => $section->end_date?->format('d.m.Y'),

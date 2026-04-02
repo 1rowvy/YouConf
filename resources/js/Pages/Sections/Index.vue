@@ -1,7 +1,9 @@
 <template>
     <div class="py-8">
         <div class="mb-5">
-            <h1 class="text-2xl md:text-4xl font-extrabold text-[#1a1a1a]">Секции</h1>
+            <h1 class="text-2xl md:text-4xl font-extrabold text-[#1a1a1a]">
+                Секции
+            </h1>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -29,15 +31,35 @@
                         {{ section.description }}
                     </p>
                     <div class="mt-3 space-y-1">
-                        <p v-if="section.start_date || section.end_date" class="text-xs text-gray-400">
-                            <span class="font-semibold text-gray-500">Даты:</span>
-                            {{ section.start_date }}{{ section.end_date && section.end_date !== section.start_date ? ' — ' + section.end_date : '' }}
+                        <p
+                            v-if="section.start_date || section.end_date"
+                            class="text-xs text-gray-400"
+                        >
+                            <span class="font-semibold text-gray-500"
+                                >Даты:</span
+                            >
+                            {{ section.start_date
+                            }}{{
+                                section.end_date &&
+                                section.end_date !== section.start_date
+                                    ? " — " + section.end_date
+                                    : ""
+                            }}
                         </p>
-                        <p v-if="section.leaders" class="text-xs text-gray-400">
-                            <span class="font-semibold text-gray-500">Руководители:</span> {{ section.leaders }}
+                        <p v-if="section.chairs" class="text-xs text-gray-400">
+                            <span class="font-semibold text-gray-500"
+                                >Председатели:</span
+                            >
+                            {{ section.chairs }}
                         </p>
-                        <p v-if="section.location_name" class="text-xs text-gray-400">
-                            <span class="font-semibold text-gray-500">Аудитория:</span> {{ section.location_name }}
+                        <p
+                            v-if="section.location_name"
+                            class="text-xs text-gray-400"
+                        >
+                            <span class="font-semibold text-gray-500"
+                                >Аудитория:</span
+                            >
+                            {{ section.location_name }}
                         </p>
                     </div>
                 </div>
@@ -82,76 +104,122 @@
             </div>
         </div>
 
-        <!-- Модальное окно анкеты -->
         <div
             v-if="modalSectionId !== null"
             class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
             @click.self="closeModal"
         >
-            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-1">Регистрация на секцию</h2>
-                <p class="text-sm text-gray-400 mb-6">Поля необязательны, но помогут организаторам подготовиться.</p>
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-8">
+                <h2 class="text-xl font-extrabold text-gray-900 mb-1">
+                    Регистрация на секцию
+                </h2>
 
                 <div class="space-y-4">
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">Уровень обучения</label>
+                            <label
+                                class="block text-sm font-bold text-gray-700 mb-1"
+                                >Уровень обучения</label
+                            >
                             <select
                                 v-model="form.degree_type"
                                 class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                             >
-                                <option value="">—</option>
-                                <option value="bachelor">Бакалавр</option>
-                                <option value="magistrant">Магистрант</option>
+                                <option value="bachelor">Бакалавриат</option>
+                                <option value="magistrant">Магистратура</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">Курс</label>
+                            <label
+                                class="block text-sm font-bold text-gray-700 mb-1"
+                                >Курс</label
+                            >
                             <input
                                 v-model="form.course"
                                 type="number"
                                 min="1"
-                                max="6"
-                                placeholder="1–6"
+                                max="5"
+                                placeholder="1–5"
                                 class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Номер группы</label>
+                        <label
+                            class="block text-sm font-bold text-gray-700 mb-1"
+                            >Номер телефона</label
+                        >
+                        <input
+                            v-model="form.phone_number"
+                            type="text"
+                            placeholder="+79999999999"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+                    <div>
+                        <label
+                            class="block text-sm font-bold text-gray-700 mb-1"
+                            >Номер группы</label
+                        >
                         <input
                             v-model="form.group_number"
                             type="text"
-                            placeholder="Например: 2-ИВТ-41"
+                            placeholder="Например: 02121-ДБ"
                             class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Примерная тема</label>
+                        <label
+                            class="block text-sm font-bold text-gray-700 mb-1"
+                            >Тема доклада (предварительная тема)</label
+                        >
                         <input
                             v-model="form.topic"
                             type="text"
-                            placeholder="Например: Влияние ИИ на образование"
                             class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Руководитель</label>
+                        <label
+                            class="block text-sm font-bold text-gray-700 mb-1"
+                            >Описание</label
+                        >
+                        <textarea
+                            v-model="form.description"
+                            rows="3"
+                            placeholder="Описание вашего доклада"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                        ></textarea>
+                    </div>
+                    <div>
+                        <label
+                            class="block text-sm font-bold text-gray-700 mb-1"
+                            >Руководитель (нужно указать учёную степень, учёное
+                            звание и ФИО руководителя)</label
+                        >
                         <input
                             v-model="form.supervisor"
                             type="text"
-                            placeholder="ФИО научного руководителя"
+                            placeholder="Например: к.ф.-м.н. доцент Иванов И.И."
                             class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Соавтор</label>
-                        <input
+                        <label
+                            class="block text-sm font-bold text-gray-700 mb-1"
+                            >Соавторы</label
+                        >
+                        <p class="text-sm text-gray-500 mb-1">
+                            Если ваш доклад делается в соавторстве, то
+                            обязательно укажите здесь ФИО соавторов, номер
+                            группы, контактный телефон и электронную почту.
+                        </p>
+                        <textarea
                             v-model="form.co_author"
-                            type="text"
-                            placeholder="ФИО соавтора (если есть)"
-                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
+                            rows="3"
+                            placeholder="Указать сооавторов необходимо по одному на строку"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                        ></textarea>
                     </div>
                 </div>
 
@@ -189,12 +257,14 @@ export default {
     },
     setup(props) {
         const form = useForm({
-            degree_type: '',
-            course: '',
-            group_number: '',
-            topic: '',
-            supervisor: '',
-            co_author: '',
+            degree_type: "",
+            course: "",
+            group_number: "",
+            topic: "",
+            supervisor: "",
+            co_author: "",
+            description: "",
+            phone_number: "",
         });
 
         const modalSectionId = ref(null);
@@ -202,6 +272,8 @@ export default {
         const statusClasses = {
             planned: "bg-orange-50 text-orange-600",
             registration: "bg-blue-50 text-blue-600",
+            thesis_submission: "bg-purple-50 text-purple-600",
+            thesis_review: "bg-amber-50 text-amber-600",
             ongoing: "bg-emerald-50 text-emerald-700",
             finished: "bg-gray-100 text-gray-400",
         };
@@ -212,13 +284,11 @@ export default {
                 return;
             }
             if (section.is_joined) {
-                // Отмена участия — без модалки
                 form.post(`/sections/${section.id}/register`, {
                     preserveScroll: true,
                 });
                 return;
             }
-            // Открыть модалку для регистрации
             form.reset();
             modalSectionId.value = section.id;
         };

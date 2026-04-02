@@ -38,40 +38,105 @@
             </div>
 
             <div class="mb-10 flex flex-col sm:flex-row gap-6">
-                <div v-if="section.start_date || section.end_date" class="flex items-start gap-3">
+                <div
+                    v-if="section.start_date || section.end_date"
+                    class="flex items-start gap-3"
+                >
                     <div class="mt-0.5 text-gray-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
                         </svg>
                     </div>
                     <div>
-                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">Даты проведения</p>
+                        <p
+                            class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5"
+                        >
+                            Даты проведения
+                        </p>
                         <p class="text-sm font-semibold text-gray-800">
-                            {{ section.start_date }}{{ section.end_date && section.end_date !== section.start_date ? ' — ' + section.end_date : '' }}
+                            {{ section.start_date
+                            }}{{
+                                section.end_date &&
+                                section.end_date !== section.start_date
+                                    ? " — " + section.end_date
+                                    : ""
+                            }}
                         </p>
                     </div>
                 </div>
-                <div v-if="section.leaders" class="flex items-start gap-3">
+                <div v-if="section.chairs" class="flex items-start gap-3">
                     <div class="mt-0.5 text-gray-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
                         </svg>
                     </div>
                     <div>
-                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">Руководители</p>
-                        <p class="text-sm font-semibold text-gray-800">{{ section.leaders }}</p>
+                        <p
+                            class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5"
+                        >
+                            Председатели
+                        </p>
+                        <p class="text-sm font-semibold text-gray-800">
+                            {{ section.chairs }}
+                        </p>
                     </div>
                 </div>
-                <div v-if="section.location_name" class="flex items-start gap-3">
+                <div
+                    v-if="section.location_name"
+                    class="flex items-start gap-3"
+                >
                     <div class="mt-0.5 text-gray-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                            />
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
                         </svg>
                     </div>
                     <div>
-                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5">Аудитория</p>
-                        <p class="text-sm font-semibold text-gray-800">{{ section.location_name }}</p>
+                        <p
+                            class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5"
+                        >
+                            Аудитория
+                        </p>
+                        <p class="text-sm font-semibold text-gray-800">
+                            {{ section.location_name }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -126,7 +191,10 @@
             </div>
         </div>
 
-        <div v-if="dateKeys.length > 0" class="flex space-x-2 mb-6 border-b overflow-x-auto scrollbar-hide">
+        <div
+            v-if="dateKeys.length > 0"
+            class="flex space-x-2 mb-6 border-b overflow-x-auto scrollbar-hide"
+        >
             <button
                 v-for="date in dateKeys"
                 :key="date"
@@ -154,74 +222,121 @@
 
         <!-- Модальное окно анкеты -->
         <div
-            v-if="showModal"
+            v-if="modalSectionId !== null"
             class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
             @click.self="closeModal"
         >
-            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-1">Регистрация на секцию</h2>
-                <p class="text-sm text-gray-400 mb-6">Поля необязательны, но помогут организаторам подготовиться.</p>
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-8">
+                <h2 class="text-xl font-extrabold text-gray-900 mb-1">
+                    Регистрация на секцию
+                </h2>
 
                 <div class="space-y-4">
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">Уровень обучения</label>
+                            <label
+                                class="block text-sm font-bold text-gray-700 mb-1"
+                                >Уровень обучения</label
+                            >
                             <select
                                 v-model="form.degree_type"
                                 class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                             >
-                                <option value="">—</option>
-                                <option value="bachelor">Бакалавр</option>
-                                <option value="magistrant">Магистрант</option>
+                                <option value="bachelor">Бакалавриат</option>
+                                <option value="magistrant">Магистратура</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">Курс</label>
+                            <label
+                                class="block text-sm font-bold text-gray-700 mb-1"
+                                >Курс</label
+                            >
                             <input
                                 v-model="form.course"
                                 type="number"
                                 min="1"
-                                max="6"
-                                placeholder="1–6"
+                                max="5"
+                                placeholder="1–5"
                                 class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Номер группы</label>
+                        <label
+                            class="block text-sm font-bold text-gray-700 mb-1"
+                            >Номер телефона</label
+                        >
+                        <input
+                            v-model="form.phone_nubmer"
+                            type="text"
+                            placeholder="+79999999999"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+                    <div>
+                        <label
+                            class="block text-sm font-bold text-gray-700 mb-1"
+                            >Номер группы</label
+                        >
                         <input
                             v-model="form.group_number"
                             type="text"
-                            placeholder="Например: 2-ИВТ-41"
+                            placeholder="Например: 02121-ДБ"
                             class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Примерная тема</label>
+                        <label
+                            class="block text-sm font-bold text-gray-700 mb-1"
+                            >Тема доклада (предварительная тема)</label
+                        >
                         <input
                             v-model="form.topic"
                             type="text"
-                            placeholder="Например: Влияние ИИ на образование"
                             class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Руководитель</label>
+                        <label
+                            class="block text-sm font-bold text-gray-700 mb-1"
+                            >Описание</label
+                        >
+                        <textarea
+                            v-model="form.description"
+                            rows="3"
+                            placeholder="Описание вашего доклада"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                        ></textarea>
+                    </div>
+                    <div>
+                        <label
+                            class="block text-sm font-bold text-gray-700 mb-1"
+                            >Руководитель (нужно указать учёную степень, учёное
+                            звание и ФИО руководителя)</label
+                        >
                         <input
                             v-model="form.supervisor"
                             type="text"
-                            placeholder="ФИО научного руководителя"
+                            placeholder="Например: к.ф.-м.н. доцент Иванов И.И."
                             class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Соавтор</label>
-                        <input
+                        <label
+                            class="block text-sm font-bold text-gray-700 mb-1"
+                            >Соавторы</label
+                        >
+                        <p class="text-sm text-gray-500 mb-1">
+                            Если ваш доклад делается в соавторстве, то
+                            обязательно укажите здесь ФИО соавторов, номер
+                            группы, контактный телефон и электронную почту.
+                        </p>
+                        <textarea
                             v-model="form.co_author"
-                            type="text"
-                            placeholder="ФИО соавтора (если есть)"
-                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
+                            rows="3"
+                            placeholder="Указать сооавторов необходимо по одному на строку"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                        ></textarea>
                     </div>
                 </div>
 
@@ -279,12 +394,14 @@ export default {
     },
     setup(props) {
         const form = useForm({
-            degree_type: '',
-            course: '',
-            group_number: '',
-            topic: '',
-            supervisor: '',
-            co_author: '',
+            degree_type: "",
+            course: "",
+            group_number: "",
+            topic: "",
+            supervisor: "",
+            co_author: "",
+            description: "",
+            phone_number: "",
         });
 
         const showModal = ref(false);
@@ -292,6 +409,8 @@ export default {
         const statusClasses = {
             planned: "bg-orange-50 text-orange-600",
             registration: "bg-blue-50 text-blue-600",
+            thesis_submission: "bg-purple-50 text-purple-600",
+            thesis_review: "bg-amber-50 text-amber-600",
             ongoing: "bg-emerald-50 text-emerald-700",
             finished: "bg-gray-100 text-gray-400",
         };
@@ -324,7 +443,14 @@ export default {
             });
         };
 
-        return { statusClasses, form, showModal, handleRegisterClick, closeModal, submitRegistration };
+        return {
+            statusClasses,
+            form,
+            showModal,
+            handleRegisterClick,
+            closeModal,
+            submitRegistration,
+        };
     },
 };
 </script>

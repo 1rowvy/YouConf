@@ -18,6 +18,7 @@ class User extends Authenticatable
         'vk_id',
         'first_name',
         'last_name',
+        'patronymic',
         'avatar',
         'email',
         'password'
@@ -44,6 +45,10 @@ class User extends Authenticatable
 
     public function getFullNameAttribute()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return implode(' ', array_filter([
+            $this->last_name,
+            $this->first_name,
+            $this->patronymic,
+        ]));
     }
 }

@@ -50,6 +50,19 @@
           </p>
         </div>
 
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-2">Отчество</label>
+          <input
+            v-model="form.patronymic"
+            type="text"
+            placeholder="Необязательно"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-[#1a1a1a] placeholder-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-gray-400"
+          />
+          <p v-if="formErrors.patronymic" class="mt-2 text-sm text-red-500 font-medium">
+            {{ getErrorMessage(formErrors.patronymic) }}
+          </p>
+        </div>
+
         <div class="pt-8 border-t border-gray-100">
           <button
             type="submit"
@@ -78,6 +91,7 @@ export default {
       form: {
         first_name: this.user_data.first_name,
         last_name: this.user_data.last_name,
+        patronymic: this.user_data.patronymic || '',
       },
       formErrors: this.errors || {},
     }

@@ -28,6 +28,7 @@ class ParticipantController extends Controller
                     'id'         => $participant->id,
                     'first_name' => $participant->first_name,
                     'last_name'  => $participant->last_name,
+                    'patronymic' => $participant->patronymic,
                     'email'      => $participant->email,
                     'topic'        => $participant->pivot->topic,
                     'supervisor'   => $participant->pivot->supervisor,
@@ -35,6 +36,8 @@ class ParticipantController extends Controller
                     'degree_type'  => $participant->pivot->degree_type,
                     'course'       => $participant->pivot->course,
                     'group_number' => $participant->pivot->group_number,
+                    'description' => $participant->pivot->description,
+                    'phone_number' => $participant->pivot->phone_number,
                 ];
             }));
             return $section;

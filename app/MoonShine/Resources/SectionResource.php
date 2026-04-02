@@ -76,13 +76,13 @@ class SectionResource extends ModelResource
 
                 Text::make('Описание', 'description'),
                 Text::make('Полное описание', 'full_description'),
-                Text::make('Руководители', 'leaders'),
+                Text::make('Председатели', 'chairs'),
 
                 Date::make('Дата начала', 'start_date')->required(),
                 Date::make('Дата окончания', 'end_date')->required(),
 
                 BelongsTo::make('Аудитория', 'location', resource: LocationResource::class)->nullable(),
-                ]),
+            ]),
         ];
     }
 

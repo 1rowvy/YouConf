@@ -12,13 +12,15 @@ return new class extends Migration
             $table->string('topic')->nullable()->after('section_id');
             $table->string('supervisor')->nullable()->after('topic');
             $table->string('co_author')->nullable()->after('supervisor');
+            $table->string('description')->nullable()->after('co_author');
+            $table->string('phone_number')->nullable()->after('description');
         });
     }
 
     public function down(): void
     {
         Schema::table('section_user', function (Blueprint $table) {
-            $table->dropColumn(['topic', 'supervisor', 'co_author']);
+            $table->dropColumn(['topic', 'supervisor', 'co_author', 'description', 'phone_number']);
         });
     }
 };
