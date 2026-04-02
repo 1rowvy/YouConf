@@ -231,6 +231,7 @@
                     Регистрация на секцию
                 </h2>
 
+                <form @submit.prevent="submitRegistration" class="flex flex-col flex-1 overflow-hidden min-h-0">
                 <div class="space-y-4 overflow-y-auto px-8 flex-1">
                     <div class="grid grid-cols-2 gap-3">
                         <div>
@@ -348,19 +349,21 @@
 
                 <div class="flex gap-3 px-8 pb-8 pt-4 shrink-0">
                     <button
+                        type="button"
                         @click="closeModal"
                         class="flex-1 py-3 rounded-full border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-all"
                     >
                         Отмена
                     </button>
                     <button
-                        @click="submitRegistration"
+                        type="submit"
                         :disabled="form.processing"
                         class="flex-1 py-3 rounded-full bg-black text-white text-sm font-semibold hover:bg-gray-800 transition-all disabled:opacity-50"
                     >
                         Зарегистрироваться
                     </button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
