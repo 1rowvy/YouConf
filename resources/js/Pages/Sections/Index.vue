@@ -106,23 +106,24 @@
 
         <div
             v-if="modalSectionId !== null"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-4"
             @click.self="closeModal"
         >
-            <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-8">
-                <h2 class="text-xl font-extrabold text-gray-900 mb-1">
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg flex flex-col max-h-[85vh] sm:max-h-[90vh]">
+                <h2 class="text-xl font-extrabold text-gray-900 px-8 pt-8 pb-4 shrink-0">
                     Регистрация на секцию
                 </h2>
 
-                <div class="space-y-4">
+                <div class="space-y-4 overflow-y-auto px-8 flex-1">
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label
                                 class="block text-sm font-bold text-gray-700 mb-1"
-                                >Уровень обучения</label
+                                >Уровень обучения<span class="text-red-500 ml-0.5">*</span></label
                             >
                             <select
                                 v-model="form.degree_type"
+                                required
                                 class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                             >
                                 <option value="bachelor">Бакалавриат</option>
@@ -132,7 +133,7 @@
                         <div>
                             <label
                                 class="block text-sm font-bold text-gray-700 mb-1"
-                                >Курс</label
+                                >Курс<span class="text-red-500 ml-0.5">*</span></label
                             >
                             <input
                                 v-model="form.course"
@@ -140,6 +141,7 @@
                                 min="1"
                                 max="5"
                                 placeholder="1–5"
+                                required
                                 class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
@@ -147,35 +149,38 @@
                     <div>
                         <label
                             class="block text-sm font-bold text-gray-700 mb-1"
-                            >Номер телефона</label
+                            >Номер телефона<span class="text-red-500 ml-0.5">*</span></label
                         >
                         <input
                             v-model="form.phone_number"
                             type="text"
                             placeholder="+79999999999"
+                            required
                             class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                     <div>
                         <label
                             class="block text-sm font-bold text-gray-700 mb-1"
-                            >Номер группы</label
+                            >Номер группы<span class="text-red-500 ml-0.5">*</span></label
                         >
                         <input
                             v-model="form.group_number"
                             type="text"
                             placeholder="Например: 02121-ДБ"
+                            required
                             class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                     <div>
                         <label
                             class="block text-sm font-bold text-gray-700 mb-1"
-                            >Тема доклада (предварительная тема)</label
+                            >Тема доклада (предварительная тема)<span class="text-red-500 ml-0.5">*</span></label
                         >
                         <input
                             v-model="form.topic"
                             type="text"
+                            required
                             class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
@@ -195,16 +200,17 @@
                         <label
                             class="block text-sm font-bold text-gray-700 mb-1"
                             >Руководитель (нужно указать учёную степень, учёное
-                            звание и ФИО руководителя)</label
+                            звание и ФИО руководителя)<span class="text-red-500 ml-0.5">*</span></label
                         >
                         <input
                             v-model="form.supervisor"
                             type="text"
                             placeholder="Например: к.ф.-м.н. доцент Иванов И.И."
+                            required
                             class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
-                    <div>
+                    <div class="pb-2">
                         <label
                             class="block text-sm font-bold text-gray-700 mb-1"
                             >Соавторы</label
@@ -223,7 +229,7 @@
                     </div>
                 </div>
 
-                <div class="flex gap-3 mt-8">
+                <div class="flex gap-3 px-8 pb-8 pt-4 shrink-0">
                     <button
                         @click="closeModal"
                         class="flex-1 py-3 rounded-full border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-all"
