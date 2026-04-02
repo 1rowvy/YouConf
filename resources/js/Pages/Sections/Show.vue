@@ -374,7 +374,7 @@ import { Link, useForm } from "@inertiajs/inertia-vue3";
 import ScheduleTable from "@/Components/ScheduleTable.vue";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 export default {
     components: { Link, ScheduleTable },
@@ -414,6 +414,10 @@ export default {
         });
 
         const showModal = ref(false);
+
+        watch(showModal, (val) => {
+            document.body.style.overflow = val ? 'hidden' : '';
+        });
 
         const statusClasses = {
             planned: "bg-orange-50 text-orange-600",
