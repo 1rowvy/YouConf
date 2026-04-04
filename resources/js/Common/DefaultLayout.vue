@@ -9,10 +9,12 @@
                 class="container mx-auto px-6 flex justify-between items-center"
             >
                 <div class="flex items-center space-x-3">
-                    <div class="bg-black p-1.5 rounded-lg">
-                        <img src="@img/logo.png" alt="Logo" class="h-6 w-6" />
+                    <div>
+                        <img src="@img/logo.jpg" alt="Logo" class="h-14 w-14" />
                     </div>
-                    <span class="text-xl font-bold">Удивительный Мир</span>
+                    <span class="font-semibold text-lg"
+                        >Конференция ИМИТ ИГУ</span
+                    >
                 </div>
 
                 <!-- Desktop: profile/login + notifications -->
@@ -121,12 +123,6 @@
                             Секции
                         </a>
                         <a
-                            href="/schedules"
-                            class="block px-4 py-2.5 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition-all"
-                        >
-                            Раписание
-                        </a>
-                        <a
                             v-if="$page.props?.role === 'expert'"
                             href="/theses"
                             class="block px-4 py-2.5 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition-all"
@@ -233,12 +229,6 @@
                     class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-all"
                     >Секции</a
                 >
-                <a
-                    href="/schedules"
-                    class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-all"
-                >
-                    Раписание
-                </a>
                 <a
                     v-if="$page.props?.role === 'expert'"
                     href="/theses"

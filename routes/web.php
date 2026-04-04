@@ -79,11 +79,6 @@ if (app()->environment('local')) {
     Route::get('/switch-user/{userId}', [UserController::class, 'switchUser'])->name('switch.user');
 }
 
-use App\Http\Controllers\ScheduleController;
-
-Route::get('/schedules', [ScheduleController::class, 'show'])->name('schedules.show');
-
-Route::get('/schedules/section/{sectionId}', [ScheduleController::class, 'getThesesBySection']);
 
 Route::post('/quill/upload', [QuillUploadController::class, 'upload'])
     ->name('moonshine.quill.upload');

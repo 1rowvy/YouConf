@@ -191,35 +191,6 @@
             </div>
         </div>
 
-        <div
-            v-if="dateKeys.length > 0"
-            class="flex space-x-2 mb-6 border-b overflow-x-auto scrollbar-hide"
-        >
-            <button
-                v-for="date in dateKeys"
-                :key="date"
-                @click="selectedDate = date"
-                :class="[
-                    'px-4 sm:px-6 py-3 font-bold text-sm transition-all whitespace-nowrap',
-                    selectedDate === date
-                        ? 'border-b-2 border-blue-600 text-blue-600'
-                        : 'text-gray-400 hover:text-gray-600',
-                ]"
-            >
-                {{ formatDate(date) }}
-            </button>
-        </div>
-
-        <div v-if="currentEvents.length > 0">
-            <ScheduleTable :sections="[section]" :events="currentEvents" />
-        </div>
-
-        <div v-else class="text-center py-20 bg-gray-50 rounded-xl">
-            <p class="text-gray-500">
-                В этот день выступлений не запланировано.
-            </p>
-        </div>
-
         <!-- Модальное окно анкеты -->
         <div
             v-if="showModal !== false"
@@ -399,30 +370,15 @@
 
 <script>
 import { Link, useForm } from "@inertiajs/inertia-vue3";
-import ScheduleTable from "@/Components/ScheduleTable.vue";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
 import { ref, watch } from "vue";
 
 export default {
-    components: { Link, ScheduleTable },
+    components: { Link },
     props: {
         section: Object,
         user: Object,
-        schedules: Object,
-    },
-    data() {
-        return {
-            selectedDate: Object.keys(this.schedules)[0] || null,
-        };
-    },
-    computed: {
-        dateKeys() {
-            return Object.keys(this.schedules).sort();
-        },
-        currentEvents() {
-            return this.selectedDate ? this.schedules[this.selectedDate] : [];
-        },
     },
     methods: {
         formatDate(date) {
