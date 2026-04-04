@@ -255,7 +255,9 @@
                             ></textarea>
                         </div>
                     </div>
-                    <div class="flex gap-3 px-8 pb-8 pt-4 shrink-0">
+                    <div
+                        class="flex sm:flex-row flex-col-reverse gap-3 px-8 pb-8 pt-4 shrink-0"
+                    >
                         <button
                             type="button"
                             @click="closeModal"
@@ -304,7 +306,7 @@ export default {
         const modalSectionId = ref(null);
 
         watch(modalSectionId, (val) => {
-            document.body.style.overflow = val !== null ? 'hidden' : '';
+            document.body.style.overflow = val !== null ? "hidden" : "";
         });
 
         const statusClasses = {
