@@ -231,12 +231,20 @@
                                     <option value="magistrant">
                                         Магистратура
                                     </option>
+                                    <option value="schoolboy">
+                                        Школьник
+                                    </option>
+                                    <option value="postgraduate">
+                                        Аспирант
+                                    </option>
                                 </select>
                             </div>
                             <div>
                                 <label
                                     class="block text-sm font-bold text-gray-700 mb-1"
-                                    >Курс<span class="text-red-500 ml-0.5"
+                                    >Курс<span
+                                        v-if="!isOptionalLevel"
+                                        class="text-red-500 ml-0.5"
                                         >*</span
                                     ></label
                                 >
@@ -246,7 +254,7 @@
                                     min="1"
                                     max="5"
                                     placeholder="1–5"
-                                    required
+                                    :required="!isOptionalLevel"
                                     class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
@@ -269,7 +277,9 @@
                         <div>
                             <label
                                 class="block text-sm font-bold text-gray-700 mb-1"
-                                >Номер группы<span class="text-red-500 ml-0.5"
+                                >Номер группы<span
+                                    v-if="!isOptionalLevel"
+                                    class="text-red-500 ml-0.5"
                                     >*</span
                                 ></label
                             >
@@ -277,7 +287,7 @@
                                 v-model="form.group_number"
                                 type="text"
                                 placeholder="Например: 02121-ДБ"
-                                required
+                                :required="!isOptionalLevel"
                                 class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
@@ -372,7 +382,7 @@
 import { Link, useForm } from "@inertiajs/inertia-vue3";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 
 export default {
     components: { Link },
@@ -455,6 +465,12 @@ export default {
             });
         };
 
+        const isOptionalLevel = computed(
+            () =>
+                form.degree_type === "schoolboy" ||
+                form.degree_type === "postgraduate"
+        );
+
         return {
             statusClasses,
             form,
@@ -462,6 +478,7 @@ export default {
             handleRegisterClick,
             closeModal,
             submitRegistration,
+            isOptionalLevel,
         };
     },
 };

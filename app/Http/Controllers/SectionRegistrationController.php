@@ -25,7 +25,7 @@ class SectionRegistrationController extends Controller
             'topic'        => 'nullable|string|max:255',
             'supervisor'   => 'nullable|string|max:255',
             'co_author'    => 'nullable|string|max:1000',
-            'degree_type'  => 'nullable|in:bachelor,magistrant',
+            'degree_type'  => 'nullable|in:bachelor,magistrant,schoolboy,postgraduate',
             'course'       => 'nullable|integer|min:1|max:5',
             'group_number' => 'nullable|string|max:50',
             'description'  => 'nullable|string|max:1000',

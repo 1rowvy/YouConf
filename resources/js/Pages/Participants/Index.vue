@@ -308,6 +308,8 @@ export default {
         degreeLabel(val) {
             if (val === "bachelor") return "Бакалавриат";
             if (val === "magistrant") return "Магистратура";
+            if (val === "schoolboy") return "Школьник";
+            if (val === "postgraduate") return "Аспирант";
             return "—";
         },
         toggleSort(field) {
