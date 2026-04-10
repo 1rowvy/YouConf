@@ -12,7 +12,7 @@
                     <div>
                         <img src="@img/logo.jpg" alt="Logo" class="h-14 w-14" />
                     </div>
-                    <span class="font-semibold text-lg"
+                    <span class="font-semibold text-lg md:flex hidden"
                         >Конференция ИМИТ ИГУ</span
                     >
                 </div>
@@ -24,13 +24,12 @@
                     <template v-if="$page.props?.user_data">
                         <Link
                             :href="'/user/' + $page.props.user_data.id"
-                            class="flex items-center justify-center bg-white border border-gray-200 py-1.5 pl-1.5 pr-4 rounded-full hover:shadow-md transition-all"
+                            class="flex items-center justify-center bg-white border border-gray-200 px-2 py-2 rounded-lg hover:shadow-md transition-all"
                         >
-                            <!-- <img
-                                :src="$page.props?.user_data?.avatar"
-                                alt="Avatar"
-                                class="h-7 w-7 rounded-full object-cover mr-2"
-                            /> -->
+                            <svg class="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="8" r="4"/>
+                                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                            </svg>
                             <p class="text-sm font-semibold">
                                 {{ $page.props?.user_data?.first_name }}
                             </p>
@@ -102,7 +101,7 @@
             >
                 <div
                     v-show="mobileMenuOpen"
-                    class="md:hidden overflow-hidden border-t border-gray-100"
+                    class="md:hidden overflow-hidden border-t mt-3 border-gray-100"
                 >
                     <div class="container mx-auto px-6 py-4 space-y-1">
                         <!-- Navigation links -->
@@ -145,18 +144,16 @@
                             <template v-if="$page.props?.user_data">
                                 <Link
                                     :href="'/user/' + $page.props.user_data.id"
-                                    class="flex items-center bg-white border border-gray-200 py-1.5 pl-1.5 pr-4 rounded-full hover:shadow-md transition-all"
+                                    class="flex items-center bg-white border border-gray-200 py-2 px-2 rounded-lg hover:shadow-md transition-all"
                                 >
+                                    <svg class="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="8" r="4"/>
+                                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                                    </svg>
                                     <span class="text-sm font-semibold">{{
                                         $page.props?.user_data?.first_name
                                     }}</span>
                                 </Link>
-                                <button
-                                    @click="logout"
-                                    class="text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 px-4 py-2 rounded-full transition-all"
-                                >
-                                    Выйти
-                                </button>
                                 <Link
                                     href="/notifications"
                                     class="relative p-2 rounded-full hover:bg-gray-100 transition-all"
@@ -189,6 +186,12 @@
                                         }}
                                     </span>
                                 </Link>
+                                <button
+                                    @click="logout"
+                                    class="text-sm font-medium border border-1 border-gray-500 text-black px-4 py-2 rounded-lg"
+                                >
+                                    Выйти
+                                </button>
                             </template>
                             <template v-else>
                                 <a

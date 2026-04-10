@@ -13,7 +13,9 @@
                     <div>
                         <img src="@img/logo.jpg" alt="Logo" class="h-14 w-14" />
                     </div>
-                    <span>Конференция ИМИТ ИГУ</span>
+                    <span class="font-semibold text-lg md:flex hidden"
+                        >Конференция ИМИТ ИГУ</span
+                    >
                 </Link>
             </div>
         </header>
