@@ -56,7 +56,7 @@ class Section extends Model
     public function users()
     {
         return $this->belongsToMany(User::class)
-            ->withPivot(['topic', 'supervisor', 'co_author', 'degree_type', 'course', 'group_number', 'phone_number', 'description'])
+            ->withPivot(['topic', 'supervisor', 'co_author', 'degree_type', 'course', 'group_number', 'phone_number', 'description', 'topics'])
             ->withTimestamps();
     }
 }

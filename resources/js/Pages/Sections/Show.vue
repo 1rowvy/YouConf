@@ -293,34 +293,50 @@
                         </div>
                         <div>
                             <label
-                                class="block text-sm font-bold text-gray-700 mb-1"
-                                >Тема доклада (предварительная тема)<span
+                                class="block text-sm font-bold text-gray-700 mb-2"
+                                >Доклады<span
                                     class="text-red-500 ml-0.5"
                                     >*</span
                                 ></label
                             >
-                            <input
-                                v-model="form.topic"
-                                type="text"
-                                required
-                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
-                        <div>
-                            <label
-                                class="block text-sm font-bold text-gray-700 mb-1"
-                                >Описание</label
+                            <div
+                                v-for="(item, index) in form.topics"
+                                :key="index"
+                                class="mb-3 p-4 border border-gray-200 rounded-xl bg-gray-50"
                             >
-                            <textarea
-                                v-model="form.description"
-                                rows="3"
-                                maxlength="1000"
-                                placeholder="Описание вашего доклада"
-                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                            ></textarea>
-                            <div class="text-xs text-gray-400 text-right mt-1">
-                                {{ form.description.length }} / 1000
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-semibold text-gray-500">Доклад {{ index + 1 }}</span>
+                                    <button
+                                        v-if="form.topics.length > 1"
+                                        type="button"
+                                        @click="removeTopic(index)"
+                                        class="text-gray-400 hover:text-red-500 transition-colors text-xl leading-none"
+                                    >×</button>
+                                </div>
+                                <input
+                                    v-model="item.topic"
+                                    type="text"
+                                    :required="index === 0"
+                                    placeholder="Тема доклада (предварительная тема)"
+                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white mb-2"
+                                />
+                                <textarea
+                                    v-model="item.description"
+                                    rows="3"
+                                    maxlength="1000"
+                                    placeholder="Описание вашего доклада"
+                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none bg-white"
+                                ></textarea>
+                                <div class="text-xs text-gray-400 text-right mt-1">
+                                    {{ item.description.length }} / 1000
+                                </div>
                             </div>
+                            <button
+                                v-if="form.topics.length < 5"
+                                type="button"
+                                @click="addTopic"
+                                class="text-sm text-blue-500 hover:text-blue-700 font-semibold transition-colors"
+                            >+ Добавить ещё доклад</button>
                         </div>
                         <div>
                             <label
@@ -408,10 +424,9 @@ export default {
             degree_type: "",
             course: "",
             group_number: "",
-            topic: "",
+            topics: [{ topic: "", description: "" }],
             supervisor: "",
             co_author: "",
-            description: "",
             phone_number: "",
         });
 
@@ -453,11 +468,18 @@ export default {
             form.degree_type = "";
             form.course = "";
             form.group_number = "";
-            form.topic = "";
+            form.topics = [{ topic: "", description: "" }];
             form.supervisor = "";
             form.co_author = "";
-            form.description = "";
             form.phone_number = "";
+        };
+
+        const addTopic = () => {
+            form.topics.push({ topic: "", description: "" });
+        };
+
+        const removeTopic = (index) => {
+            form.topics.splice(index, 1);
         };
 
         const closeModal = () => {
@@ -487,6 +509,8 @@ export default {
             closeModal,
             submitRegistration,
             isOptionalLevel,
+            addTopic,
+            removeTopic,
         };
     },
 };

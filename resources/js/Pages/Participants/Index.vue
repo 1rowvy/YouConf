@@ -103,20 +103,25 @@
                                     <span class="font-semibold">Группа:</span>
                                     {{ user.group_number }}
                                 </p>
-                                <p
-                                    v-if="user.topic"
-                                    class="text-sm text-gray-600"
+                                <div
+                                    v-if="user.topics && user.topics.length > 0"
+                                    class="space-y-1"
                                 >
-                                    <span class="font-semibold">Тема:</span>
-                                    {{ user.topic }}
-                                </p>
-                                <p
-                                    v-if="user.topic"
-                                    class="text-sm text-gray-600"
-                                >
-                                    <span class="font-semibold">Описание:</span>
-                                    {{ user.description }}
-                                </p>
+                                    <div
+                                        v-for="(t, i) in user.topics"
+                                        :key="i"
+                                        class="text-sm text-gray-600"
+                                    >
+                                        <p>
+                                            <span class="font-semibold">Тема {{ user.topics.length > 1 ? i + 1 : '' }}:</span>
+                                            {{ t.topic }}
+                                        </p>
+                                        <p v-if="t.description">
+                                            <span class="font-semibold">Описание:</span>
+                                            {{ t.description }}
+                                        </p>
+                                    </div>
+                                </div>
                                 <p
                                     v-if="user.supervisor"
                                     class="text-sm text-gray-600"
@@ -193,14 +198,9 @@
                                         Группа
                                     </th>
                                     <th
-                                        class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider min-w-[200px]"
-                                    >
-                                        Тема
-                                    </th>
-                                    <th
                                         class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider min-w-[400px]"
                                     >
-                                        Описание
+                                        Доклады
                                     </th>
                                     <th
                                         class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider min-w-[300px]"
@@ -261,10 +261,19 @@
                                         {{ user.group_number || "—" }}
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-600">
-                                        {{ user.topic || "—" }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">
-                                        {{ user.description || "—" }}
+                                        <div
+                                            v-if="user.topics && user.topics.length > 0"
+                                            class="space-y-2"
+                                        >
+                                            <div
+                                                v-for="(t, i) in user.topics"
+                                                :key="i"
+                                            >
+                                                <p class="font-medium">{{ user.topics.length > 1 ? (i + 1) + '. ' : '' }}{{ t.topic }}</p>
+                                                <p v-if="t.description" class="text-gray-400 text-xs mt-0.5">{{ t.description }}</p>
+                                            </div>
+                                        </div>
+                                        <span v-else>—</span>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-600">
                                         {{ user.supervisor || "—" }}
