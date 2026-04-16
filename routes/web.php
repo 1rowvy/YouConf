@@ -65,6 +65,7 @@ Route::get('/api/pages', [StaticPageController::class, 'getAllPages']);
 
 Route::get('/sections', [SectionController::class, 'index']);
 Route::get('/sections/{section}', [SectionController::class, 'show']);
+Route::get('/participants/public', [ParticipantController::class, 'publicIndex'])->name('participants.public');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/theses', [ThesisController::class, 'index'])->name('theses.index');
