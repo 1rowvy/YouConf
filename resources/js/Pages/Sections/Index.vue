@@ -53,13 +53,13 @@
                             {{ section.chairs }}
                         </p>
                         <p
-                            v-if="section.location_name"
+                            v-if="section.location_names"
                             class="text-xs text-gray-400"
                         >
                             <span class="font-semibold text-gray-500"
                                 >Аудитория:</span
                             >
-                            {{ section.location_name }}
+                            {{ section.location_names }}
                         </p>
                     </div>
                 </div>

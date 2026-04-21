@@ -104,7 +104,7 @@
                     </div>
                 </div>
                 <div
-                    v-if="section.location_name"
+                    v-if="section.location_names"
                     class="flex items-start gap-3"
                 >
                     <div class="mt-0.5 text-gray-400">
@@ -135,7 +135,7 @@
                             Аудитория
                         </p>
                         <p class="text-sm font-semibold text-gray-800">
-                            {{ section.location_name }}
+                            {{ section.location_names }}
                         </p>
                     </div>
                 </div>

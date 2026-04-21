@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Enums\SectionStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Section extends Model
 {
@@ -18,7 +18,6 @@ class Section extends Model
         'chairs',
         'start_date',
         'end_date',
-        'location_id',
     ];
 
     protected $casts = [
@@ -43,9 +42,9 @@ class Section extends Model
         return $this->users()->where('user_id', $user->id)->exists();
     }
 
-    public function location(): BelongsTo
+    public function locations(): BelongsToMany
     {
-        return $this->belongsTo(Location::class);
+        return $this->belongsToMany(Location::class);
     }
 
     public function theses()

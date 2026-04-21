@@ -12,4 +12,9 @@ class Location extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function __toString(): string
+    {
+        return $this->name ?? '';
+    }
 }
