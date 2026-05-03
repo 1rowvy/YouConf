@@ -17,8 +17,8 @@ jobs:
           script: |
             cd /var/www/YouConf
 
-            git checkout master
-            git pull origin master
+            git fetch origin master
+            git reset --hard origin/master
 
             composer install --optimize-autoloader
 
