@@ -25,16 +25,26 @@ Route::get('/auth/vk', function () {
 Route::get('vk/auth/callback', [LoginController::class, 'handleProviderCallback'])->name('auth.vk.callback');
 
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\SectionRegistrationController;
 
-// Добавляем рядом с другими auth роутами
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
 
+Route::middleware('auth')->group(function () {
+    Route::get('/email/verify', [VerificationController::class, 'notice'])->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])
+        ->middleware('signed')
+        ->name('verification.verify');
+    Route::post('/email/verification-notification', [VerificationController::class, 'resend'])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
+});
+
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::middleware(['web', 'auth'])->group(function () {
+Route::middleware(['web', 'auth', 'verified'])->group(function () {
     Route::get('/user/{id}', [UserController::class, 'show'])->name('user.show');
     Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
@@ -67,7 +77,7 @@ Route::get('/sections', [SectionController::class, 'index']);
 Route::get('/sections/{section}', [SectionController::class, 'show']);
 Route::get('/participants/public', [ParticipantController::class, 'publicIndex'])->name('participants.public');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/theses', [ThesisController::class, 'index'])->name('theses.index');
     Route::post('/theses/{id}/status', [ThesisController::class, 'updateStatus'])->name('theses.updateStatus');
     Route::post('/sections/{section}/register', [SectionRegistrationController::class, 'toggle'])->name('sections.register');

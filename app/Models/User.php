@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use App\Notifications\VerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Role;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory;
     use HasRoles;
     use Notifiable;
+    use MustVerifyEmailTrait;
 
     protected $fillable = [
         'vk_id',
@@ -21,8 +25,18 @@ class User extends Authenticatable
         'patronymic',
         'avatar',
         'email',
-        'password'
+        'email_verified_at',
+        'password',
     ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new VerifyEmail);
+    }
 
     public function getRoleIdAttribute()
     {
