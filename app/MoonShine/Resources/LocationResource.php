@@ -26,6 +26,8 @@ class LocationResource extends ModelResource
 
     protected string $title = 'Места проведения';
 
+    protected string $column = 'name';
+
     protected function indexButtons(): ListOf
     {
         return parent::indexButtons()

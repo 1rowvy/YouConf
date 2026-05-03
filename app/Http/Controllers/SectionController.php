@@ -15,7 +15,7 @@ class SectionController extends Controller
     {
         $user = Auth::user();
 
-        $sections = Section::with('location')->get()->map(function ($section) use ($user) {
+        $sections = Section::with('locations')->get()->map(function ($section) use ($user) {
             return array_merge($section->toArray(), [
                 'status' => $section->status->value,
                 'status_label' => $section->status->label(),
@@ -24,7 +24,7 @@ class SectionController extends Controller
                 'can_create_thesis' => $section->canCreateThesis(),
                 'start_date' => $section->start_date?->format('d.m.Y'),
                 'end_date' => $section->end_date?->format('d.m.Y'),
-                'location_name' => $section->location?->name,
+                'location_names' => $section->locations->pluck('name')->join(', '),
             ]);
         });
 
@@ -37,7 +37,7 @@ class SectionController extends Controller
     public function show(Section $section)
     {
         $user = Auth::user();
-        $section->load('location');
+        $section->load('locations');
 
         $sectionData = array_merge($section->toArray(), [
             'status' => $section->status->value,
@@ -47,7 +47,7 @@ class SectionController extends Controller
             'is_joined' => $section->hasParticipant($user),
             'start_date' => $section->start_date?->format('d.m.Y'),
             'end_date' => $section->end_date?->format('d.m.Y'),
-            'location_name' => $section->location?->name,
+            'location_names' => $section->locations->pluck('name')->join(', '),
         ]);
 
         $schedules = Schedule::with(['thesis.user'])

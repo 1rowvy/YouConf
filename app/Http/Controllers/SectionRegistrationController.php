@@ -22,24 +22,28 @@ class SectionRegistrationController extends Controller
         }
 
         $request->validate([
-            'topic'        => 'nullable|string|max:255',
-            'supervisor'   => 'nullable|string|max:255',
-            'co_author'    => 'nullable|string|max:1000',
-            'degree_type'  => 'nullable|in:bachelor,magistrant',
-            'course'       => 'nullable|integer|min:1|max:5',
-            'group_number' => 'nullable|string|max:50',
-            'description'  => 'nullable|string|max:1000',
-            'phone_number' => 'nullable|string|max:12'
+            'topics'               => 'nullable|array|max:5',
+            'topics.*.topic'       => 'nullable|string|max:255',
+            'topics.*.description' => 'nullable|string|max:1000',
+            'supervisor'           => 'nullable|string|max:255',
+            'co_author'            => 'nullable|string|max:1000',
+            'degree_type'          => 'nullable|in:bachelor,magistrant,schoolboy,postgraduate',
+            'course'               => 'nullable|integer|min:1|max:5',
+            'group_number'         => 'nullable|string|max:50',
+            'phone_number'         => 'nullable|string|max:12',
         ]);
 
+        $topics = $request->topics ?? [];
+
         $section->users()->attach($user->id, [
-            'topic'        => $request->topic,
+            'topic'        => $topics[0]['topic'] ?? null,
+            'description'  => $topics[0]['description'] ?? null,
+            'topics'       => json_encode($topics),
             'supervisor'   => $request->supervisor,
             'co_author'    => $request->co_author,
             'degree_type'  => $request->degree_type,
             'course'       => $request->course,
             'group_number' => $request->group_number,
-            'description'  => $request->description,
             'phone_number' => $request->phone_number,
         ]);
 

@@ -11,8 +11,6 @@ use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Notifications\ThesisStatusChanged;
-use App\Models\Schedule;
-use Illuminate\Support\Facades\Log;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -60,63 +58,6 @@ class ThesisController extends Controller
         $thesis->save();
 
         $newStatus = $thesis->fresh()->status;
-
-        if ($newStatus->id == 2) {
-            DB::beginTransaction();
-            try {
-                $section = $thesis->section;
-
-                $lastSchedule = Schedule::where('section_id', $thesis->section_id)
-                    ->orderBy('date', 'desc')
-                    ->orderBy('end_time', 'desc')
-                    ->first();
-
-                $duration = 15;
-
-                if ($lastSchedule) {
-                    $currentDate = Carbon::parse($lastSchedule->date);
-                    $lastEndTime = Carbon::parse($lastSchedule->end_time);
-
-                    $potentialEndTime = $lastEndTime->copy()->addMinutes($duration);
-
-                    if ($potentialEndTime->hour >= 20) {
-                        $newDate = $currentDate->addDay();
-                        $newStartTime = '10:00:00';
-                    } else {
-                        $newDate = $currentDate;
-                        $newStartTime = $lastSchedule->end_time;
-                    }
-                } else {
-                    $newDate = Carbon::parse($section->start_date);
-                    $newStartTime = '10:00:00';
-                }
-
-                $sectionEndDate = Carbon::parse($section->end_date);
-                if ($newDate->gt($sectionEndDate)) {
-                    throw new \Exception('Невозможно назначить время: все дни секции заполнены.');
-                }
-
-                $newEndTime = Carbon::parse($newStartTime)->addMinutes($duration)->format('H:i');
-
-                Schedule::create([
-                    'thesis_id'   => $thesis->id,
-                    'section_id'  => $thesis->section_id,
-                    'date'        => $newDate->format('Y-m-d'),
-                    'start_time'  => $newStartTime,
-                    'duration'    => $duration,
-                    'end_time'    => $newEndTime,
-                    'event_type'  => 'thesis',
-                    'title'       => $thesis->title,
-                    'description' => $thesis->description
-                ]);
-
-                DB::commit();
-            } catch (\Exception $e) {
-                DB::rollBack();
-                Log::error('Schedule creation error: ' . $e->getMessage());
-                return redirect()->back()->with('error', 'Ошибка распределения времени: ' . $e->getMessage());
-            }
-        }
 
         $thesis->user->notify(new ThesisStatusChanged($thesis, $oldStatus, $newStatus));
 

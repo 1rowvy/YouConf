@@ -53,13 +53,13 @@
                             {{ section.chairs }}
                         </p>
                         <p
-                            v-if="section.location_name"
+                            v-if="section.location_names"
                             class="text-xs text-gray-400"
                         >
                             <span class="font-semibold text-gray-500"
                                 >Аудитория:</span
                             >
-                            {{ section.location_name }}
+                            {{ section.location_names }}
                         </p>
                     </div>
                 </div>
@@ -143,12 +143,20 @@
                                     <option value="magistrant">
                                         Магистратура
                                     </option>
+                                    <option value="schoolboy">
+                                        Школьник
+                                    </option>
+                                    <option value="postgraduate">
+                                        Аспирант
+                                    </option>
                                 </select>
                             </div>
                             <div>
                                 <label
                                     class="block text-sm font-bold text-gray-700 mb-1"
-                                    >Курс<span class="text-red-500 ml-0.5"
+                                    >Курс<span
+                                        v-if="!isOptionalLevel"
+                                        class="text-red-500 ml-0.5"
                                         >*</span
                                     ></label
                                 >
@@ -158,7 +166,7 @@
                                     min="1"
                                     max="5"
                                     placeholder="1–5"
-                                    required
+                                    :required="!isOptionalLevel"
                                     class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
@@ -181,7 +189,9 @@
                         <div>
                             <label
                                 class="block text-sm font-bold text-gray-700 mb-1"
-                                >Номер группы<span class="text-red-500 ml-0.5"
+                                >Номер группы<span
+                                    v-if="!isOptionalLevel"
+                                    class="text-red-500 ml-0.5"
                                     >*</span
                                 ></label
                             >
@@ -189,36 +199,56 @@
                                 v-model="form.group_number"
                                 type="text"
                                 placeholder="Например: 02121-ДБ"
-                                required
+                                :required="!isOptionalLevel"
                                 class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                         <div>
                             <label
-                                class="block text-sm font-bold text-gray-700 mb-1"
-                                >Тема доклада (предварительная тема)<span
+                                class="block text-sm font-bold text-gray-700 mb-2"
+                                >Доклады<span
                                     class="text-red-500 ml-0.5"
                                     >*</span
                                 ></label
                             >
-                            <input
-                                v-model="form.topic"
-                                type="text"
-                                required
-                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
-                        <div>
-                            <label
-                                class="block text-sm font-bold text-gray-700 mb-1"
-                                >Описание</label
+                            <div
+                                v-for="(item, index) in form.topics"
+                                :key="index"
+                                class="mb-3 p-4 border border-gray-200 rounded-xl bg-gray-50"
                             >
-                            <textarea
-                                v-model="form.description"
-                                rows="3"
-                                placeholder="Описание вашего доклада"
-                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                            ></textarea>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-semibold text-gray-500">Доклад {{ index + 1 }}</span>
+                                    <button
+                                        v-if="form.topics.length > 1"
+                                        type="button"
+                                        @click="removeTopic(index)"
+                                        class="text-gray-400 hover:text-red-500 transition-colors text-xl leading-none"
+                                    >×</button>
+                                </div>
+                                <input
+                                    v-model="item.topic"
+                                    type="text"
+                                    :required="index === 0"
+                                    placeholder="Тема доклада (предварительная тема)"
+                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white mb-2"
+                                />
+                                <textarea
+                                    v-model="item.description"
+                                    rows="3"
+                                    maxlength="1000"
+                                    placeholder="Описание вашего доклада"
+                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none bg-white"
+                                ></textarea>
+                                <div class="text-xs text-gray-400 text-right mt-1">
+                                    {{ item.description.length }} / 1000
+                                </div>
+                            </div>
+                            <button
+                                v-if="form.topics.length < 5"
+                                type="button"
+                                @click="addTopic"
+                                class="text-sm text-blue-500 hover:text-blue-700 font-semibold transition-colors"
+                            >+ Добавить ещё доклад</button>
                         </div>
                         <div>
                             <label
@@ -250,12 +280,18 @@
                             <textarea
                                 v-model="form.co_author"
                                 rows="3"
+                                maxlength="1000"
                                 placeholder="Указать сооавторов необходимо по одному на строку"
                                 class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                             ></textarea>
+                            <div class="text-xs text-gray-400 text-right mt-1">
+                                {{ form.co_author.length }} / 1000
+                            </div>
                         </div>
                     </div>
-                    <div class="flex gap-3 px-8 pb-8 pt-4 shrink-0">
+                    <div
+                        class="flex sm:flex-row flex-col-reverse gap-3 px-8 pb-8 pt-4 shrink-0"
+                    >
                         <button
                             type="button"
                             @click="closeModal"
@@ -279,7 +315,7 @@
 
 <script>
 import { useForm, Link } from "@inertiajs/inertia-vue3";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 
 export default {
     components: {
@@ -294,17 +330,16 @@ export default {
             degree_type: "",
             course: "",
             group_number: "",
-            topic: "",
+            topics: [{ topic: "", description: "" }],
             supervisor: "",
             co_author: "",
-            description: "",
             phone_number: "",
         });
 
         const modalSectionId = ref(null);
 
         watch(modalSectionId, (val) => {
-            document.body.style.overflow = val !== null ? 'hidden' : '';
+            document.body.style.overflow = val !== null ? "hidden" : "";
         });
 
         const statusClasses = {
@@ -314,6 +349,14 @@ export default {
             thesis_review: "bg-amber-50 text-amber-600",
             ongoing: "bg-emerald-50 text-emerald-700",
             finished: "bg-gray-100 text-gray-400",
+        };
+
+        const addTopic = () => {
+            form.topics.push({ topic: "", description: "" });
+        };
+
+        const removeTopic = (index) => {
+            form.topics.splice(index, 1);
         };
 
         const handleRegisterClick = (section) => {
@@ -328,6 +371,7 @@ export default {
                 return;
             }
             form.reset();
+            form.topics = [{ topic: "", description: "" }];
             modalSectionId.value = section.id;
         };
 
@@ -344,6 +388,12 @@ export default {
             });
         };
 
+        const isOptionalLevel = computed(
+            () =>
+                form.degree_type === "schoolboy" ||
+                form.degree_type === "postgraduate"
+        );
+
         return {
             form,
             statusClasses,
@@ -351,6 +401,9 @@ export default {
             handleRegisterClick,
             closeModal,
             submitRegistration,
+            isOptionalLevel,
+            addTopic,
+            removeTopic,
         };
     },
 };

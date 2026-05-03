@@ -104,7 +104,7 @@
                     </div>
                 </div>
                 <div
-                    v-if="section.location_name"
+                    v-if="section.location_names"
                     class="flex items-start gap-3"
                 >
                     <div class="mt-0.5 text-gray-400">
@@ -135,7 +135,7 @@
                             Аудитория
                         </p>
                         <p class="text-sm font-semibold text-gray-800">
-                            {{ section.location_name }}
+                            {{ section.location_names }}
                         </p>
                     </div>
                 </div>
@@ -191,178 +191,211 @@
             </div>
         </div>
 
-        <div
-            v-if="dateKeys.length > 0"
-            class="flex space-x-2 mb-6 border-b overflow-x-auto scrollbar-hide"
-        >
-            <button
-                v-for="date in dateKeys"
-                :key="date"
-                @click="selectedDate = date"
-                :class="[
-                    'px-4 sm:px-6 py-3 font-bold text-sm transition-all whitespace-nowrap',
-                    selectedDate === date
-                        ? 'border-b-2 border-blue-600 text-blue-600'
-                        : 'text-gray-400 hover:text-gray-600',
-                ]"
-            >
-                {{ formatDate(date) }}
-            </button>
-        </div>
-
-        <div v-if="currentEvents.length > 0">
-            <ScheduleTable :sections="[section]" :events="currentEvents" />
-        </div>
-
-        <div v-else class="text-center py-20 bg-gray-50 rounded-xl">
-            <p class="text-gray-500">
-                В этот день выступлений не запланировано.
-            </p>
-        </div>
-
         <!-- Модальное окно анкеты -->
         <div
             v-if="showModal !== false"
             class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-4"
             @click.self="closeModal"
         >
-            <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg flex flex-col max-h-[85vh] sm:max-h-[90vh]">
-                <h2 class="text-xl font-extrabold text-gray-900 px-8 pt-8 pb-4 shrink-0">
+            <div
+                class="bg-white rounded-2xl shadow-xl w-full max-w-lg flex flex-col max-h-[85vh] sm:max-h-[90vh]"
+            >
+                <h2
+                    class="text-xl font-extrabold text-gray-900 px-8 pt-8 pb-4 shrink-0"
+                >
                     Регистрация на секцию
                 </h2>
 
-                <form @submit.prevent="submitRegistration" class="flex flex-col flex-1 overflow-hidden min-h-0">
-                <div class="space-y-4 overflow-y-auto px-8 flex-1">
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label
-                                class="block text-sm font-bold text-gray-700 mb-1"
-                                >Уровень обучения<span class="text-red-500 ml-0.5">*</span></label
-                            >
-                            <select
-                                v-model="form.degree_type"
-                                required
-                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                            >
-                                <option value="bachelor">Бакалавриат</option>
-                                <option value="magistrant">Магистратура</option>
-                            </select>
+                <form
+                    @submit.prevent="submitRegistration"
+                    class="flex flex-col flex-1 overflow-hidden min-h-0"
+                >
+                    <div class="space-y-4 overflow-y-auto px-8 flex-1">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label
+                                    class="block text-sm font-bold text-gray-700 mb-1"
+                                    >Уровень обучения<span
+                                        class="text-red-500 ml-0.5"
+                                        >*</span
+                                    ></label
+                                >
+                                <select
+                                    v-model="form.degree_type"
+                                    required
+                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                                >
+                                    <option value="bachelor">
+                                        Бакалавриат
+                                    </option>
+                                    <option value="magistrant">
+                                        Магистратура
+                                    </option>
+                                    <option value="schoolboy">
+                                        Школьник
+                                    </option>
+                                    <option value="postgraduate">
+                                        Аспирант
+                                    </option>
+                                </select>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-bold text-gray-700 mb-1"
+                                    >Курс<span
+                                        v-if="!isOptionalLevel"
+                                        class="text-red-500 ml-0.5"
+                                        >*</span
+                                    ></label
+                                >
+                                <input
+                                    v-model="form.course"
+                                    type="number"
+                                    min="1"
+                                    max="5"
+                                    placeholder="1–5"
+                                    :required="!isOptionalLevel"
+                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
                         </div>
                         <div>
                             <label
                                 class="block text-sm font-bold text-gray-700 mb-1"
-                                >Курс<span class="text-red-500 ml-0.5">*</span></label
+                                >Номер телефона<span class="text-red-500 ml-0.5"
+                                    >*</span
+                                ></label
                             >
                             <input
-                                v-model="form.course"
-                                type="number"
-                                min="1"
-                                max="5"
-                                placeholder="1–5"
+                                v-model="form.phone_number"
+                                type="text"
+                                placeholder="+79999999999"
                                 required
                                 class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
+                        <div>
+                            <label
+                                class="block text-sm font-bold text-gray-700 mb-1"
+                                >Номер группы<span
+                                    v-if="!isOptionalLevel"
+                                    class="text-red-500 ml-0.5"
+                                    >*</span
+                                ></label
+                            >
+                            <input
+                                v-model="form.group_number"
+                                type="text"
+                                placeholder="Например: 02121-ДБ"
+                                :required="!isOptionalLevel"
+                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+                        <div>
+                            <label
+                                class="block text-sm font-bold text-gray-700 mb-2"
+                                >Доклады<span
+                                    class="text-red-500 ml-0.5"
+                                    >*</span
+                                ></label
+                            >
+                            <div
+                                v-for="(item, index) in form.topics"
+                                :key="index"
+                                class="mb-3 p-4 border border-gray-200 rounded-xl bg-gray-50"
+                            >
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-semibold text-gray-500">Доклад {{ index + 1 }}</span>
+                                    <button
+                                        v-if="form.topics.length > 1"
+                                        type="button"
+                                        @click="removeTopic(index)"
+                                        class="text-gray-400 hover:text-red-500 transition-colors text-xl leading-none"
+                                    >×</button>
+                                </div>
+                                <input
+                                    v-model="item.topic"
+                                    type="text"
+                                    :required="index === 0"
+                                    placeholder="Тема доклада (предварительная тема)"
+                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white mb-2"
+                                />
+                                <textarea
+                                    v-model="item.description"
+                                    rows="3"
+                                    maxlength="1000"
+                                    placeholder="Описание вашего доклада"
+                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none bg-white"
+                                ></textarea>
+                                <div class="text-xs text-gray-400 text-right mt-1">
+                                    {{ item.description.length }} / 1000
+                                </div>
+                            </div>
+                            <button
+                                v-if="form.topics.length < 5"
+                                type="button"
+                                @click="addTopic"
+                                class="text-sm text-blue-500 hover:text-blue-700 font-semibold transition-colors"
+                            >+ Добавить ещё доклад</button>
+                        </div>
+                        <div>
+                            <label
+                                class="block text-sm font-bold text-gray-700 mb-1"
+                                >Руководитель (нужно указать учёную степень,
+                                учёное звание и ФИО руководителя)<span
+                                    class="text-red-500 ml-0.5"
+                                    >*</span
+                                ></label
+                            >
+                            <input
+                                v-model="form.supervisor"
+                                type="text"
+                                placeholder="Например: к.ф.-м.н. доцент Иванов И.И."
+                                required
+                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+                        <div class="pb-2">
+                            <label
+                                class="block text-sm font-bold text-gray-700 mb-1"
+                                >Соавторы</label
+                            >
+                            <p class="text-sm text-gray-500 mb-1">
+                                Если ваш доклад делается в соавторстве, то
+                                обязательно укажите здесь ФИО соавторов, номер
+                                группы, контактный телефон и электронную почту.
+                            </p>
+                            <textarea
+                                v-model="form.co_author"
+                                rows="3"
+                                maxlength="1000"
+                                placeholder="Указать сооавторов необходимо по одному на строку"
+                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                            ></textarea>
+                            <div class="text-xs text-gray-400 text-right mt-1">
+                                {{ form.co_author.length }} / 1000
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label
-                            class="block text-sm font-bold text-gray-700 mb-1"
-                            >Номер телефона<span class="text-red-500 ml-0.5">*</span></label
-                        >
-                        <input
-                            v-model="form.phone_number"
-                            type="text"
-                            placeholder="+79999999999"
-                            required
-                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-                    <div>
-                        <label
-                            class="block text-sm font-bold text-gray-700 mb-1"
-                            >Номер группы<span class="text-red-500 ml-0.5">*</span></label
-                        >
-                        <input
-                            v-model="form.group_number"
-                            type="text"
-                            placeholder="Например: 02121-ДБ"
-                            required
-                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-                    <div>
-                        <label
-                            class="block text-sm font-bold text-gray-700 mb-1"
-                            >Тема доклада (предварительная тема)<span class="text-red-500 ml-0.5">*</span></label
-                        >
-                        <input
-                            v-model="form.topic"
-                            type="text"
-                            required
-                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-                    <div>
-                        <label
-                            class="block text-sm font-bold text-gray-700 mb-1"
-                            >Описание</label
-                        >
-                        <textarea
-                            v-model="form.description"
-                            rows="3"
-                            placeholder="Описание вашего доклада"
-                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                        ></textarea>
-                    </div>
-                    <div>
-                        <label
-                            class="block text-sm font-bold text-gray-700 mb-1"
-                            >Руководитель (нужно указать учёную степень, учёное
-                            звание и ФИО руководителя)<span class="text-red-500 ml-0.5">*</span></label
-                        >
-                        <input
-                            v-model="form.supervisor"
-                            type="text"
-                            placeholder="Например: к.ф.-м.н. доцент Иванов И.И."
-                            required
-                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-                    <div class="pb-2">
-                        <label
-                            class="block text-sm font-bold text-gray-700 mb-1"
-                            >Соавторы</label
-                        >
-                        <p class="text-sm text-gray-500 mb-1">
-                            Если ваш доклад делается в соавторстве, то
-                            обязательно укажите здесь ФИО соавторов, номер
-                            группы, контактный телефон и электронную почту.
-                        </p>
-                        <textarea
-                            v-model="form.co_author"
-                            rows="3"
-                            placeholder="Указать сооавторов необходимо по одному на строку"
-                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                        ></textarea>
-                    </div>
-                </div>
 
-                <div class="flex gap-3 px-8 pb-8 pt-4 shrink-0">
-                    <button
-                        type="button"
-                        @click="closeModal"
-                        class="flex-1 py-3 rounded-full border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-all"
+                    <div
+                        class="flex sm:flex-row flex-col-reverse gap-3 px-8 pb-8 pt-4 shrink-0"
                     >
-                        Отмена
-                    </button>
-                    <button
-                        type="submit"
-                        :disabled="form.processing"
-                        class="flex-1 py-3 rounded-full bg-black text-white text-sm font-semibold hover:bg-gray-800 transition-all disabled:opacity-50"
-                    >
-                        Зарегистрироваться
-                    </button>
-                </div>
+                        <button
+                            type="button"
+                            @click="closeModal"
+                            class="flex-1 py-3 rounded-full border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-all"
+                        >
+                            Отмена
+                        </button>
+                        <button
+                            type="submit"
+                            :disabled="form.processing"
+                            class="flex-1 py-3 rounded-full bg-black text-white text-sm font-semibold hover:bg-gray-800 transition-all disabled:opacity-50"
+                        >
+                            Зарегистрироваться
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -371,30 +404,15 @@
 
 <script>
 import { Link, useForm } from "@inertiajs/inertia-vue3";
-import ScheduleTable from "@/Components/ScheduleTable.vue";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 
 export default {
-    components: { Link, ScheduleTable },
+    components: { Link },
     props: {
         section: Object,
         user: Object,
-        schedules: Object,
-    },
-    data() {
-        return {
-            selectedDate: Object.keys(this.schedules)[0] || null,
-        };
-    },
-    computed: {
-        dateKeys() {
-            return Object.keys(this.schedules).sort();
-        },
-        currentEvents() {
-            return this.selectedDate ? this.schedules[this.selectedDate] : [];
-        },
     },
     methods: {
         formatDate(date) {
@@ -406,17 +424,16 @@ export default {
             degree_type: "",
             course: "",
             group_number: "",
-            topic: "",
+            topics: [{ topic: "", description: "" }],
             supervisor: "",
             co_author: "",
-            description: "",
             phone_number: "",
         });
 
         const showModal = ref(false);
 
         watch(showModal, (val) => {
-            document.body.style.overflow = val ? 'hidden' : '';
+            document.body.style.overflow = val ? "hidden" : "";
         });
 
         const statusClasses = {
@@ -451,11 +468,18 @@ export default {
             form.degree_type = "";
             form.course = "";
             form.group_number = "";
-            form.topic = "";
+            form.topics = [{ topic: "", description: "" }];
             form.supervisor = "";
             form.co_author = "";
-            form.description = "";
             form.phone_number = "";
+        };
+
+        const addTopic = () => {
+            form.topics.push({ topic: "", description: "" });
+        };
+
+        const removeTopic = (index) => {
+            form.topics.splice(index, 1);
         };
 
         const closeModal = () => {
@@ -471,6 +495,12 @@ export default {
             });
         };
 
+        const isOptionalLevel = computed(
+            () =>
+                form.degree_type === "schoolboy" ||
+                form.degree_type === "postgraduate"
+        );
+
         return {
             statusClasses,
             form,
@@ -478,6 +508,9 @@ export default {
             handleRegisterClick,
             closeModal,
             submitRegistration,
+            isOptionalLevel,
+            addTopic,
+            removeTopic,
         };
     },
 };

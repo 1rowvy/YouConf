@@ -74,9 +74,9 @@
             </div>
         </div>
 
-        <div class="grid gap-2">
+        <!-- <div class="grid gap-2">
             <VkAuthButton class="w-full" />
-        </div>
+        </div> -->
 
         <div class="text-center">
             <Link

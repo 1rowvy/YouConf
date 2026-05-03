@@ -65,6 +65,7 @@ Route::get('/api/pages', [StaticPageController::class, 'getAllPages']);
 
 Route::get('/sections', [SectionController::class, 'index']);
 Route::get('/sections/{section}', [SectionController::class, 'show']);
+Route::get('/participants/public', [ParticipantController::class, 'publicIndex'])->name('participants.public');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/theses', [ThesisController::class, 'index'])->name('theses.index');
@@ -79,11 +80,6 @@ if (app()->environment('local')) {
     Route::get('/switch-user/{userId}', [UserController::class, 'switchUser'])->name('switch.user');
 }
 
-use App\Http\Controllers\ScheduleController;
-
-Route::get('/schedules', [ScheduleController::class, 'show'])->name('schedules.show');
-
-Route::get('/schedules/section/{sectionId}', [ScheduleController::class, 'getThesesBySection']);
 
 Route::post('/quill/upload', [QuillUploadController::class, 'upload'])
     ->name('moonshine.quill.upload');

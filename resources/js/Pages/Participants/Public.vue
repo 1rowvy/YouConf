@@ -67,18 +67,6 @@
                                 {{ user.last_name }} {{ user.first_name }}
                                 {{ user.patronymic }}
                             </p>
-                            <p
-                                v-if="user.email"
-                                class="text-sm text-gray-500 mt-1"
-                            >
-                                {{ user.email }}
-                            </p>
-                            <p
-                                v-if="user.email"
-                                class="text-sm text-gray-500 mt-1"
-                            >
-                                {{ user.phone_number }}
-                            </p>
                             <div
                                 class="mt-3 pt-3 border-t border-gray-100 space-y-1"
                             >
@@ -175,16 +163,6 @@
                                     <th
                                         class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider whitespace-nowrap"
                                     >
-                                        Номер телефона
-                                    </th>
-                                    <th
-                                        class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider whitespace-nowrap"
-                                    >
-                                        Email
-                                    </th>
-                                    <th
-                                        class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider whitespace-nowrap"
-                                    >
                                         Уровень
                                     </th>
                                     <th
@@ -234,16 +212,6 @@
                                         class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap"
                                     >
                                         {{ user.patronymic }}
-                                    </td>
-                                    <td
-                                        class="px-6 py-4 text-sm text-gray-700 whitespace-nowrap"
-                                    >
-                                        {{ user.phone_number }}
-                                    </td>
-                                    <td
-                                        class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap"
-                                    >
-                                        {{ user.email || "—" }}
                                     </td>
                                     <td
                                         class="px-6 py-4 text-sm text-gray-600 whitespace-nowrap"
