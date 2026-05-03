@@ -43,7 +43,8 @@ class RegisterController extends Controller
             $user->assignRole($participantRole);
 
             Auth::login($user);
-            return Inertia::location(route('user.show', ['id' => $user->id]));
+            $user->sendEmailVerificationNotification();
+            return Inertia::location(route('verification.notice'));
         } catch (ValidationException $e) {
             return Inertia::render('Auth/Register', [
                 'errors' => $e->validator->errors(),
