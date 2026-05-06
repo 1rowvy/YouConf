@@ -106,10 +106,12 @@ Route::prefix('admin')->middleware(config('moonshine.middleware'))->group(functi
     });
 });
 
-Route::get('/{slug}', [StaticPageController::class, 'show'])
-    ->name('static-pages.show');
-
 //expert routes
 Route::middleware(['auth', 'verified'])->prefix('expert')->group(function () {
     Route::get('/', [ExpertController::class, 'dashboard'])->name('dashboard');
+    Route::get('/participants', [ExpertController::class, 'participants'])->name('participants');
 });
+
+
+Route::get('/{slug}', [StaticPageController::class, 'show'])
+    ->name('static-pages.show');
