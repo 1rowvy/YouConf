@@ -95,6 +95,7 @@ Route::post('/quill/upload', [QuillUploadController::class, 'upload'])
     ->name('moonshine.quill.upload');
 
 use App\Http\Controllers\Admin\ImportExportController;
+use App\Http\Controllers\ExpertController;
 
 Route::prefix('admin')->middleware(config('moonshine.middleware'))->group(function () {
     Route::middleware(config('moonshine.auth.middleware'))->group(function () {
@@ -107,3 +108,8 @@ Route::prefix('admin')->middleware(config('moonshine.middleware'))->group(functi
 
 Route::get('/{slug}', [StaticPageController::class, 'show'])
     ->name('static-pages.show');
+
+//expert routes
+Route::middleware(['auth', 'verified'])->prefix('expert')->group(function () {
+    Route::get('/', [ExpertController::class, 'dashboard'])->name('dashboard');
+});
