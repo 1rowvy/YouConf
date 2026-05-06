@@ -1,8 +1,8 @@
 <template>
-    <div class="flex flex-row min-h-screem min-w-full">
+    <div class="flex flex-row min-h-screen min-w-full bg-[#F9F9FB]">
         <Sidebar />
-        <main class="flex ml-64 p-6 px-8">
-            <div class="">
+        <main class="flex-1 ml-60 p-6 md:p-8">
+            <div class="max-w-[1400px] mx-auto w-full">
                 <slot></slot>
             </div>
         </main>
