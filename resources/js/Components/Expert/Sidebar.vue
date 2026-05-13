@@ -3,16 +3,7 @@
         class="fixed top-0 left-0 h-screen w-60 bg-white border-r border-gray-100 flex flex-col z-30"
     >
         <div class="flex items-center gap-2 px-6 pt-6 pb-8">
-            <div
-                class="w-9 h-9 rounded-xl bg-black flex items-center justify-center"
-            >
-                <Sparkles :size="18" class="text-white" />
-            </div>
             <h1 class="font-bold text-lg tracking-tight">YouConf</h1>
-            <span
-                class="text-[10px] uppercase font-bold text-gray-400 tracking-wider mt-1"
-                >Expert</span
-            >
         </div>
 
         <nav class="flex-1 px-3 space-y-1">
@@ -33,15 +24,7 @@
         </nav>
 
         <div class="px-3 pb-4 pt-3 border-t border-gray-100">
-            <div
-                v-if="userData"
-                class="flex items-center gap-3 px-2 py-3 mb-2"
-            >
-                <div
-                    class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-sm font-bold shrink-0"
-                >
-                    {{ userInitials }}
-                </div>
+            <div v-if="userData" class="flex items-center gap-3 px-2 py-3 mb-2">
                 <div class="min-w-0">
                     <p class="text-sm font-semibold text-gray-900 truncate">
                         {{ userData.first_name }} {{ userData.last_name }}
@@ -63,7 +46,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, getCurrentInstance } from "vue";
+import {
+    ref,
+    computed,
+    onMounted,
+    onBeforeUnmount,
+    getCurrentInstance,
+} from "vue";
 import { House, Layers, FileText, Users, LogOut, Sparkles } from "@lucide/vue";
 import { Inertia } from "@inertiajs/inertia";
 
@@ -74,7 +63,9 @@ const menuItems = [
     { name: "Участники", icon: Users, route: "/expert/participants" },
 ];
 
-const currentUrl = ref(typeof window !== "undefined" ? window.location.pathname : "/expert");
+const currentUrl = ref(
+    typeof window !== "undefined" ? window.location.pathname : "/expert",
+);
 let removeNavigateListener;
 
 onMounted(() => {
@@ -93,14 +84,16 @@ const isActive = (route) => {
 };
 
 const instance = getCurrentInstance();
-const userData = computed(() => instance?.proxy?.$page?.props?.user_data || null);
+const userData = computed(
+    () => instance?.proxy?.$page?.props?.user_data || null,
+);
 
 const userInitials = computed(() => {
     const u = userData.value;
     if (!u) return "?";
     const first = (u.first_name || "").charAt(0).toUpperCase();
     const last = (u.last_name || "").charAt(0).toUpperCase();
-    return (first + last) || "?";
+    return first + last || "?";
 });
 
 const logout = () => {

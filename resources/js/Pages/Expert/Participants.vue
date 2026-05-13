@@ -1,13 +1,14 @@
 <template>
     <div class="flex flex-col gap-8">
-        <header class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <header
+            class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4"
+        >
             <div>
-                <p class="text-sm text-gray-400 mb-1">Эксперт</p>
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
-                    Участники
-                </h1>
-                <p class="text-gray-500 mt-2">
-                    Список зарегистрированных участников по вашим секциям.
+                <p class="text-sm text-gray-400 mb-1">Участники</p>
+                <p
+                    class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight"
+                >
+                    Список зарегистрированных участников
                 </p>
             </div>
             <div
@@ -77,17 +78,10 @@
                     class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all"
                 >
                     <div class="flex items-start gap-4">
-                        <div
-                            :class="[
-                                'w-12 h-12 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0',
-                                avatarColor(user),
-                            ]"
-                        >
-                            {{ initials(user) }}
-                        </div>
-
                         <div class="flex-1 min-w-0">
-                            <p class="text-base font-bold text-gray-900 truncate">
+                            <p
+                                class="text-base font-bold text-gray-900 truncate"
+                            >
                                 {{ user.last_name }} {{ user.first_name }}
                                 {{ user.patronymic }}
                             </p>
@@ -97,14 +91,22 @@
                                     v-if="user.email"
                                     class="flex items-center gap-2 text-sm text-gray-500"
                                 >
-                                    <Mail :size="14" class="text-gray-400 shrink-0" />
-                                    <span class="truncate">{{ user.email }}</span>
+                                    <Mail
+                                        :size="14"
+                                        class="text-gray-400 shrink-0"
+                                    />
+                                    <span class="truncate">{{
+                                        user.email
+                                    }}</span>
                                 </div>
                                 <div
                                     v-if="user.phone_number"
                                     class="flex items-center gap-2 text-sm text-gray-500"
                                 >
-                                    <Phone :size="14" class="text-gray-400 shrink-0" />
+                                    <Phone
+                                        :size="14"
+                                        class="text-gray-400 shrink-0"
+                                    />
                                     <span>{{ user.phone_number }}</span>
                                 </div>
                             </div>
@@ -115,7 +117,9 @@
                         class="mt-4 pt-4 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs"
                     >
                         <div v-if="user.degree_type">
-                            <p class="text-gray-400 font-medium mb-0.5">Уровень</p>
+                            <p class="text-gray-400 font-medium mb-0.5">
+                                Уровень
+                            </p>
                             <p class="text-gray-900 font-semibold">
                                 {{ degreeLabel(user.degree_type) }}
                             </p>
@@ -127,7 +131,9 @@
                             </p>
                         </div>
                         <div v-if="user.group_number">
-                            <p class="text-gray-400 font-medium mb-0.5">Группа</p>
+                            <p class="text-gray-400 font-medium mb-0.5">
+                                Группа
+                            </p>
                             <p class="text-gray-900 font-semibold">
                                 {{ user.group_number }}
                             </p>
@@ -144,7 +150,9 @@
                             class="bg-gray-50 rounded-xl p-3"
                         >
                             <p class="text-xs text-gray-400 font-medium mb-1">
-                                Тема{{ user.topics.length > 1 ? " " + (i + 1) : "" }}
+                                Тема{{
+                                    user.topics.length > 1 ? " " + (i + 1) : ""
+                                }}
                             </p>
                             <p class="text-sm font-semibold text-gray-900">
                                 {{ t.topic }}
@@ -163,11 +171,15 @@
                         class="mt-4 pt-4 border-t border-gray-100 space-y-1.5 text-xs"
                     >
                         <p v-if="user.supervisor" class="text-gray-500">
-                            <span class="font-semibold text-gray-700">Руководитель:</span>
+                            <span class="font-semibold text-gray-700"
+                                >Руководитель:</span
+                            >
                             {{ user.supervisor }}
                         </p>
                         <p v-if="user.co_author" class="text-gray-500">
-                            <span class="font-semibold text-gray-700">Соавторы:</span>
+                            <span class="font-semibold text-gray-700"
+                                >Соавторы:</span
+                            >
                             {{ user.co_author }}
                         </p>
                     </div>
@@ -214,7 +226,7 @@ export default {
         totalParticipants() {
             return this.filteredSections.reduce(
                 (acc, s) => acc + (s.users?.length || 0),
-                0
+                0,
             );
         },
     },
@@ -242,19 +254,6 @@ export default {
                     ? va.localeCompare(vb)
                     : vb.localeCompare(va);
             });
-        },
-        initials(user) {
-            const f = (user.first_name || "").charAt(0).toUpperCase();
-            const l = (user.last_name || "").charAt(0).toUpperCase();
-            return (l + f) || "?";
-        },
-        avatarColor(user) {
-            const key = `${user.last_name || ""}${user.first_name || ""}${user.id || ""}`;
-            let hash = 0;
-            for (let i = 0; i < key.length; i++) {
-                hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
-            }
-            return this.avatarPalette[hash % this.avatarPalette.length];
         },
         pluralize(n) {
             const mod10 = n % 10;

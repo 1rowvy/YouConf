@@ -1,20 +1,10 @@
 <template>
     <div class="flex flex-col gap-8">
-        <header class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <header
+            class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4"
+        >
             <div>
                 <p class="text-sm text-gray-400 mb-1">Главная</p>
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
-                    Здравствуйте, {{ $page.props.user_data.first_name }}!
-                </h1>
-                <p class="text-gray-500 mt-2">
-                    Следите за вашими назначенными секциями.
-                </p>
-            </div>
-            <div
-                class="flex items-center gap-2 text-sm font-semibold text-gray-700 bg-white border border-gray-100 rounded-full px-4 py-2 shadow-sm self-start"
-            >
-                <Calendar :size="16" class="text-gray-400" />
-                <span>{{ todayLabel }}</span>
             </div>
         </header>
 
@@ -33,7 +23,9 @@
                     <component :is="stat.icon" :size="22" :class="stat.fg" />
                 </div>
                 <div>
-                    <p class="text-xs text-gray-400 font-medium">{{ stat.label }}</p>
+                    <p class="text-xs text-gray-400 font-medium">
+                        {{ stat.label }}
+                    </p>
                     <p class="text-2xl font-bold text-gray-900 leading-tight">
                         {{ stat.value }}
                     </p>
@@ -69,7 +61,9 @@
                     ]"
                 >
                     <div class="p-6 flex-1 flex flex-col">
-                        <div class="flex items-start justify-between gap-3 mb-4">
+                        <div
+                            class="flex items-start justify-between gap-3 mb-4"
+                        >
                             <span
                                 :class="statusClasses[section.status]"
                                 class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
@@ -90,18 +84,24 @@
                             {{ section.description }}
                         </p>
 
-                        <div class="space-y-2 mt-auto pt-4 border-t border-gray-100">
+                        <div
+                            class="space-y-2 mt-auto pt-4 border-t border-gray-100"
+                        >
                             <div
                                 v-if="section.start_date || section.end_date"
                                 class="flex items-center gap-2 text-xs text-gray-500"
                             >
-                                <Calendar :size="14" class="text-gray-400 shrink-0" />
+                                <Calendar
+                                    :size="14"
+                                    class="text-gray-400 shrink-0"
+                                />
                                 <span>
                                     {{ formatDate(section.start_date)
                                     }}{{
                                         section.end_date &&
                                         section.end_date !== section.start_date
-                                            ? " — " + formatDate(section.end_date)
+                                            ? " — " +
+                                              formatDate(section.end_date)
                                             : ""
                                     }}
                                 </span>
@@ -110,15 +110,25 @@
                                 v-if="section.chairs"
                                 class="flex items-center gap-2 text-xs text-gray-500"
                             >
-                                <UserCog :size="14" class="text-gray-400 shrink-0" />
-                                <span class="truncate">{{ section.chairs }}</span>
+                                <UserCog
+                                    :size="14"
+                                    class="text-gray-400 shrink-0"
+                                />
+                                <span class="truncate">{{
+                                    section.chairs
+                                }}</span>
                             </div>
                             <div
                                 v-if="section.location_names"
                                 class="flex items-center gap-2 text-xs text-gray-500"
                             >
-                                <MapPin :size="14" class="text-gray-400 shrink-0" />
-                                <span class="truncate">{{ section.location_names }}</span>
+                                <MapPin
+                                    :size="14"
+                                    class="text-gray-400 shrink-0"
+                                />
+                                <span class="truncate">{{
+                                    section.location_names
+                                }}</span>
                             </div>
                         </div>
                     </div>
@@ -196,7 +206,7 @@ const stats = computed(() => [
     {
         label: "На рецензии",
         value: props.sections.filter((s) =>
-            ["thesis_review", "thesis_submission"].includes(s.status)
+            ["thesis_review", "thesis_submission"].includes(s.status),
         ).length,
         icon: FileSearch,
         bg: "bg-amber-50",
@@ -210,16 +220,6 @@ const stats = computed(() => [
         fg: "text-emerald-600",
     },
 ]);
-
-const months = [
-    "января", "февраля", "марта", "апреля", "мая", "июня",
-    "июля", "августа", "сентября", "октября", "ноября", "декабря",
-];
-
-const todayLabel = (() => {
-    const d = new Date();
-    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-})();
 
 const formatDate = (dateString) => {
     if (!dateString) return "";

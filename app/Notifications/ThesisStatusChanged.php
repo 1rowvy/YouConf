@@ -6,12 +6,13 @@ use App\Models\Thesis;
 use App\Models\Status;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Facades\DB;
 
-class ThesisStatusChanged extends Notification
+class ThesisStatusChanged extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -23,7 +24,7 @@ class ThesisStatusChanged extends Notification
 
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     public function toDatabase(object $notifiable): array
@@ -46,7 +47,7 @@ class ThesisStatusChanged extends Notification
         return [
             'title' => 'Статус заявки изменён',
             'message' => sprintf(
-                'Статус вашей заявки "%s" изменён с "%s" на "%s"',
+                'Статус вашей работы «%s» изменён с «%s» на «%s»',
                 $this->thesis->title,
                 $this->oldStatus->name,
                 $this->newStatus->name
@@ -55,5 +56,19 @@ class ThesisStatusChanged extends Notification
             'old_status' => $this->oldStatus->name,
             'new_status' => $this->newStatus->name,
         ];
+    }
+
+    public function toMail(object $notifiable): MailMessage
+    {
+        return (new MailMessage)
+            ->subject('Ваша работа проверена экспертом — YouConf')
+            ->greeting("Здравствуйте, {$notifiable->first_name}!")
+            ->line(sprintf(
+                'Статус вашей работы «%s» изменён с «%s» на «%s».',
+                $this->thesis->title,
+                $this->oldStatus->name,
+                $this->newStatus->name
+            ))
+            ->action('Посмотреть тезис', url("/theses/{$this->thesis->id}"));
     }
 }
