@@ -53,7 +53,7 @@ import {
     onBeforeUnmount,
     getCurrentInstance,
 } from "vue";
-import { House, Layers, FileText, Users, LogOut, Sparkles } from "@lucide/vue";
+import { House, Layers, FileText, Users, LogOut, Sparkles, Mail } from "@lucide/vue";
 import { Inertia } from "@inertiajs/inertia";
 
 const menuItems = [
@@ -61,6 +61,7 @@ const menuItems = [
     { name: "Секции", icon: Layers, route: "/expert/sections" },
     { name: "Тезисы", icon: FileText, route: "/expert/theses" },
     { name: "Участники", icon: Users, route: "/expert/participants" },
+    { name: "Рассылки", icon: Mail, route: "/expert/mailings" },
 ];
 
 const currentUrl = ref(

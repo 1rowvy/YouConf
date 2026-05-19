@@ -46,6 +46,7 @@ class ThesisController extends Controller
         $request->validate([
             'status_id' => 'required|exists:statuses,id',
             'review_comment' => 'nullable|string|max:5000',
+            'redirect_to' => 'nullable|string',
         ]);
 
         $user = Auth::user();
@@ -121,6 +122,11 @@ class ThesisController extends Controller
         }
 
         $thesis->user->notify(new ThesisStatusChanged($thesis, $oldStatus, $newStatus));
+
+        $redirectTo = $request->input('redirect_to');
+        if ($redirectTo) {
+            return redirect($redirectTo)->with('success', 'Статус обновлен');
+        }
 
         return redirect()->back()->with('success', 'Статус обновлен');
     }

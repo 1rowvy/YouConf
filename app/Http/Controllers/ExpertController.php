@@ -64,10 +64,12 @@ class ExpertController extends Controller
         }
 
         $statuses = Status::all();
+        $mediaFiles = $thesis->getMedia('attachments');
 
         return inertia('Expert/ThesisReview', [
             'thesis' => $thesis,
             'statuses' => $statuses,
+            'mediaFiles' => $mediaFiles,
         ]);
     }
 

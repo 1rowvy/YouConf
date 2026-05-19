@@ -40,6 +40,26 @@
                 <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{{ thesis.description }}</p>
             </div>
 
+            <div v-if="mediaFiles && mediaFiles.length" class="mb-8">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Файлы</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div
+                        v-for="file in mediaFiles"
+                        :key="file.id"
+                        class="group bg-gray-50 rounded-xl p-3 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                        @click="downloadFile(file)"
+                    >
+                        <div v-if="isImage(file)" class="aspect-square rounded-lg overflow-hidden mb-2">
+                            <img :src="file.original_url" alt="" class="w-full h-full object-cover" />
+                        </div>
+                        <div v-else class="aspect-square rounded-lg bg-gray-100 flex items-center justify-center mb-2">
+                            <span class="text-2xl" v-html="getFileIcon(file)"></span>
+                        </div>
+                        <p class="text-xs font-medium text-gray-500 truncate">{{ file.name }}</p>
+                    </div>
+                </div>
+            </div>
+
             <form @submit.prevent="submitReview">
                 <div class="space-y-5">
                     <div>
@@ -111,6 +131,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    mediaFiles: {
+        type: Array,
+        default: () => [],
+    },
 })
 
 const submitting = ref(false)
@@ -119,6 +143,7 @@ const errorMessage = ref('')
 const form = useForm({
     status_id: props.thesis.status_id,
     review_comment: props.thesis.review_comment ?? '',
+    redirect_to: '/expert/theses',
 })
 
 const statusClasses = {
@@ -126,6 +151,25 @@ const statusClasses = {
     2: 'bg-emerald-50 text-emerald-700',
     3: 'bg-blue-50 text-blue-600',
     4: 'bg-red-50 text-red-500',
+}
+
+function isImage(file) {
+    return file.mime_type?.startsWith('image/')
+}
+
+function getFileIcon(file) {
+    const ext = file.file_name?.split('.').pop()
+    return ({ pdf: '📄', doc: '📝', docx: '📝' }[ext] || '📁')
+}
+
+function downloadFile(file) {
+    const link = document.createElement('a')
+    link.href = file.original_url
+    link.download = file.name
+    link.target = '_blank'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
 }
 
 function submitReview() {

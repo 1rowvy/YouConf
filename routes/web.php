@@ -102,6 +102,7 @@ Route::post('/quill/upload', [QuillUploadController::class, 'upload'])
 
 use App\Http\Controllers\Admin\ImportExportController;
 use App\Http\Controllers\ExpertController;
+use App\Http\Controllers\MailingController;
 
 Route::prefix('admin')->middleware(config('moonshine.middleware'))->group(function () {
     Route::middleware(config('moonshine.auth.middleware'))->group(function () {
@@ -118,6 +119,8 @@ Route::middleware(['auth', 'verified'])->prefix('expert')->group(function () {
     Route::get('/participants', [ExpertController::class, 'participants'])->name('participants');
     Route::get('/theses', [ExpertController::class, 'theses'])->name('expert.theses');
     Route::get('/theses/{id}/review', [ExpertController::class, 'review'])->name('expert.thesis.review');
+    Route::get('/mailings', [MailingController::class, 'index'])->name('expert.mailings');
+    Route::post('/mailings/send', [MailingController::class, 'send'])->name('expert.mailings.send');
 });
 
 
