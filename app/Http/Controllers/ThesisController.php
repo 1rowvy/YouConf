@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Thesis;
 use App\Models\Chat;
-use App\Models\File;
+use App\Models\Schedule;
 use App\Models\Section;
 use App\Models\Status;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Thesis;
 use App\Models\User;
 use App\Notifications\ThesisStatusChanged;
-
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ThesisController extends Controller
 {
@@ -41,7 +41,7 @@ class ThesisController extends Controller
         ]);
     }
 
-    public function updateStatus(Request $request, $id)
+    public function thesisReview(Request $request, $id)
     {
         $request->validate([
             'status_id' => 'required|exists:statuses,id',
@@ -58,6 +58,65 @@ class ThesisController extends Controller
         $thesis->save();
 
         $newStatus = $thesis->fresh()->status;
+
+        if ($newStatus->id == 2) {
+            DB::beginTransaction();
+            try {
+                $section = $thesis->section;
+                $sectionStartTime = Carbon::createFromFormat('H:i:s', $section->start_time);
+                $sectionEndTime = Carbon::createFromFormat('H:i:s', $section->end_time);
+
+                $lastSchedule = Schedule::where('section_id', $thesis->section_id)
+                    ->orderBy('date', 'desc')
+                    ->orderBy('end_time', 'desc')
+                    ->first();
+
+                $duration = $section->presentation_duration;
+
+                if ($lastSchedule) {
+                    $currentDate = Carbon::parse($lastSchedule->date);
+                    $lastEndTime = Carbon::parse($lastSchedule->end_time);
+
+                    $potentialEndTime = $lastEndTime->copy()->addMinutes($duration);
+
+                    if ($potentialEndTime->format('H:i') > $sectionEndTime->format('H:i')) {
+                        $newDate = $currentDate->addDay();
+                        $newStartTime = $sectionStartTime;
+                    } else {
+                        $newDate = $currentDate;
+                        $newStartTime = $lastSchedule->end_time;
+                    }
+                } else {
+                    $newDate = Carbon::parse($section->start_date);
+                    $newStartTime = $sectionStartTime;
+                }
+
+                $sectionEndDate = Carbon::parse($section->end_date);
+                if ($newDate->gt($sectionEndDate)) {
+                    throw new \Exception('Невозможно назначить время: все дни секции заполнены.');
+                }
+
+                $newEndTime = Carbon::parse($newStartTime)->addMinutes($duration)->format('H:i');
+
+                Schedule::create([
+                    'thesis_id'   => $thesis->id,
+                    'section_id'  => $thesis->section_id,
+                    'date'        => $newDate->format('Y-m-d'),
+                    'start_time'  => $newStartTime,
+                    'duration'    => $duration,
+                    'end_time'    => $newEndTime,
+                    'event_type'  => 'thesis',
+                    'title'       => $thesis->title,
+                    'description' => $thesis->description
+                ]);
+
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Schedule creation error: ' . $e->getMessage());
+                return redirect()->back()->with('error', 'Ошибка распределения времени: ' . $e->getMessage());
+            }
+        }
 
         $thesis->user->notify(new ThesisStatusChanged($thesis, $oldStatus, $newStatus));
 

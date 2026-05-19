@@ -79,7 +79,7 @@ Route::get('/participants/public', [ParticipantController::class, 'publicIndex']
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/theses', [ThesisController::class, 'index'])->name('theses.index');
-    Route::post('/theses/{id}/status', [ThesisController::class, 'updateStatus'])->name('theses.updateStatus');
+    Route::post('/theses/{id}/status', [ThesisController::class, 'thesisReview'])->name('theses.thesisReview');
     Route::post('/sections/{section}/register', [SectionRegistrationController::class, 'toggle'])->name('sections.register');
     Route::get('/participants', [ParticipantController::class, 'index'])->name('participants.index');
 });
@@ -89,6 +89,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 if (app()->environment('local')) {
     Route::get('/switch-user/{userId}', [UserController::class, 'switchUser'])->name('switch.user');
 }
+
+use App\Http\Controllers\ScheduleController;
+
+Route::get('/schedules', [ScheduleController::class, 'show'])->name('schedules.show');
+
+Route::get('/schedules/section/{sectionId}', [ScheduleController::class, 'getThesesBySection']);
 
 
 Route::post('/quill/upload', [QuillUploadController::class, 'upload'])

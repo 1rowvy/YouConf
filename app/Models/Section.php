@@ -18,6 +18,10 @@ class Section extends Model
         'chairs',
         'start_date',
         'end_date',
+        'start_time',
+        'end_time',
+        'revision_limit',
+        'presentation_duration'
     ];
 
     protected $casts = [

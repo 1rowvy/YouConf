@@ -191,6 +191,35 @@
             </div>
         </div>
 
+        <div
+            v-if="dateKeys.length > 0"
+            class="flex space-x-2 mb-6 border-b overflow-x-auto scrollbar-hide"
+        >
+            <button
+                v-for="date in dateKeys"
+                :key="date"
+                @click="selectedDate = date"
+                :class="[
+                    'px-4 sm:px-6 py-3 font-bold text-sm transition-all whitespace-nowrap',
+                    selectedDate === date
+                        ? 'border-b-2 border-blue-600 text-blue-600'
+                        : 'text-gray-400 hover:text-gray-600',
+                ]"
+            >
+                {{ formatDate(date) }}
+            </button>
+        </div>
+
+        <div v-if="currentEvents.length > 0">
+            <ScheduleTable :sections="[section]" :events="currentEvents" />
+        </div>
+
+        <div v-else class="text-center py-20 bg-gray-50 rounded-xl">
+            <p class="text-gray-500">
+                В этот день выступлений не запланировано.
+            </p>
+        </div>
+
         <!-- Модальное окно анкеты -->
         <div
             v-if="showModal !== false"
@@ -231,9 +260,7 @@
                                     <option value="magistrant">
                                         Магистратура
                                     </option>
-                                    <option value="schoolboy">
-                                        Школьник
-                                    </option>
+                                    <option value="schoolboy">Школьник</option>
                                     <option value="postgraduate">
                                         Аспирант
                                     </option>
@@ -294,8 +321,7 @@
                         <div>
                             <label
                                 class="block text-sm font-bold text-gray-700 mb-2"
-                                >Доклады<span
-                                    class="text-red-500 ml-0.5"
+                                >Доклады<span class="text-red-500 ml-0.5"
                                     >*</span
                                 ></label
                             >
@@ -304,14 +330,21 @@
                                 :key="index"
                                 class="mb-3 p-4 border border-gray-200 rounded-xl bg-gray-50"
                             >
-                                <div class="flex items-center justify-between mb-2">
-                                    <span class="text-sm font-semibold text-gray-500">Доклад {{ index + 1 }}</span>
+                                <div
+                                    class="flex items-center justify-between mb-2"
+                                >
+                                    <span
+                                        class="text-sm font-semibold text-gray-500"
+                                        >Доклад {{ index + 1 }}</span
+                                    >
                                     <button
                                         v-if="form.topics.length > 1"
                                         type="button"
                                         @click="removeTopic(index)"
                                         class="text-gray-400 hover:text-red-500 transition-colors text-xl leading-none"
-                                    >×</button>
+                                    >
+                                        ×
+                                    </button>
                                 </div>
                                 <input
                                     v-model="item.topic"
@@ -327,7 +360,9 @@
                                     placeholder="Описание вашего доклада"
                                     class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none bg-white"
                                 ></textarea>
-                                <div class="text-xs text-gray-400 text-right mt-1">
+                                <div
+                                    class="text-xs text-gray-400 text-right mt-1"
+                                >
                                     {{ item.description.length }} / 1000
                                 </div>
                             </div>
@@ -336,7 +371,9 @@
                                 type="button"
                                 @click="addTopic"
                                 class="text-sm text-blue-500 hover:text-blue-700 font-semibold transition-colors"
-                            >+ Добавить ещё доклад</button>
+                            >
+                                + Добавить ещё доклад
+                            </button>
                         </div>
                         <div>
                             <label
@@ -404,15 +441,30 @@
 
 <script>
 import { Link, useForm } from "@inertiajs/inertia-vue3";
+import ScheduleTable from "@/Components/ScheduleTable.vue";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
 import { ref, watch, computed } from "vue";
 
 export default {
-    components: { Link },
+    components: { Link, ScheduleTable },
     props: {
         section: Object,
         user: Object,
+        schedules: Object,
+    },
+    data() {
+        return {
+            selectedDate: Object.keys(this.schedules)[0] || null,
+        };
+    },
+    computed: {
+        dateKeys() {
+            return Object.keys(this.schedules).sort();
+        },
+        currentEvents() {
+            return this.selectedDate ? this.schedules[this.selectedDate] : [];
+        },
     },
     methods: {
         formatDate(date) {
@@ -498,7 +550,7 @@ export default {
         const isOptionalLevel = computed(
             () =>
                 form.degree_type === "schoolboy" ||
-                form.degree_type === "postgraduate"
+                form.degree_type === "postgraduate",
         );
 
         return {

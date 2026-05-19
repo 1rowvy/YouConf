@@ -26,9 +26,14 @@
                             :href="'/user/' + $page.props.user_data.id"
                             class="flex items-center justify-center bg-white border border-gray-200 px-2 py-2 rounded-lg hover:shadow-md transition-all"
                         >
-                            <svg class="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="12" cy="8" r="4"/>
-                                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                            <svg
+                                class="h-5 w-5 mr-2 text-gray-400"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <circle cx="12" cy="8" r="4" />
+                                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
                             </svg>
                             <p class="text-sm font-semibold">
                                 {{ $page.props?.user_data?.first_name }}
@@ -122,6 +127,12 @@
                             Секции
                         </a>
                         <a
+                            href="/schedules"
+                            class="block px-4 py-2.5 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition-all"
+                        >
+                            Раписание
+                        </a>
+                        <a
                             v-if="$page.props?.role === 'expert'"
                             href="/theses"
                             class="block px-4 py-2.5 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition-all"
@@ -146,9 +157,14 @@
                                     :href="'/user/' + $page.props.user_data.id"
                                     class="flex items-center bg-white border border-gray-200 py-2 px-2 rounded-lg hover:shadow-md transition-all"
                                 >
-                                    <svg class="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="12" cy="8" r="4"/>
-                                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                                    <svg
+                                        class="h-5 w-5 mr-2 text-gray-400"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <circle cx="12" cy="8" r="4" />
+                                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
                                     </svg>
                                     <span class="text-sm font-semibold">{{
                                         $page.props?.user_data?.first_name
@@ -232,6 +248,12 @@
                     class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-all"
                     >Секции</a
                 >
+                <a
+                    href="/schedules"
+                    class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-all"
+                >
+                    Раписание
+                </a>
                 <a
                     v-if="$page.props?.role === 'expert'"
                     href="/theses"

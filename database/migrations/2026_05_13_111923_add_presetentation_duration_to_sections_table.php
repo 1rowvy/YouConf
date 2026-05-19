@@ -6,19 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::table('sections', function (Blueprint $table) {
-            $table->time('start_time')->default('10:00:00')->after('end_date');
-            $table->time('end_time')->default('20:00:00')->after('start_time');
-            $table->unsignedSmallInteger('revision_limit')->default(1)->after('end_time');
+            $table->unsignedInteger('presentation_duration')->default(15)->after('revision_limit');
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::table('sections', function (Blueprint $table) {
-            $table->dropColumn(['start_time', 'end_time', 'revision_limit']);
+            $table->dropColumn(['presentation_duration']);
         });
     }
 };

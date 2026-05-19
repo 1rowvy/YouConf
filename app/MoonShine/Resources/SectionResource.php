@@ -21,6 +21,7 @@ use MoonShine\Support\ListOf;
 use MoonShine\UI\Components\TableBuilder;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\Enum;
+use MoonShine\UI\Fields\Number;
 
 /**
  * @extends ModelResource<Section>
@@ -77,10 +78,18 @@ class SectionResource extends ModelResource
                 Text::make('Полное описание', 'full_description'),
                 Text::make('Председатели', 'chairs'),
 
+                BelongsToMany::make('Аудитории', 'locations', resource: LocationResource::class),
+            ]),
+
+            Box::make('Даты проведения', [
                 Date::make('Дата начала', 'start_date')->required(),
                 Date::make('Дата окончания', 'end_date')->required(),
+            ]),
 
-                BelongsToMany::make('Аудитории', 'locations', resource: LocationResource::class),
+            Box::make('Работа секции', [
+                Text::make('Начало работы секции', 'start_time')->setAttribute('type', 'time')->required(),
+                Text::make('Конец работы секции', 'end_time')->setAttribute('type', 'time')->required(),
+                Number::make('Время защиты (в минутах)', 'presentation_duration')->required()
             ]),
         ];
     }
