@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Section;
+use App\Models\Status;
+use App\Models\Thesis;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,7 +38,37 @@ class ExpertController extends Controller
             abort(403);
         }
 
-        return inertia('Expert/Theses');
+        $sectionIds = $user->sections()->pluck('sections.id');
+        $theses = Thesis::whereIn('section_id', $sectionIds)
+            ->with(['section', 'user', 'status'])
+            ->get();
+
+        return inertia('Expert/Theses', [
+            'theses' => $theses,
+        ]);
+    }
+
+    public function review($id)
+    {
+        $user = User::findOrFail(Auth::user()->id);
+
+        if (!$user->hasRole('expert')) {
+            abort(403);
+        }
+
+        $thesis = Thesis::with(['section', 'user', 'status'])->findOrFail($id);
+
+        $expertSectionIds = $user->sections()->pluck('sections.id');
+        if (!$expertSectionIds->contains($thesis->section_id)) {
+            abort(403);
+        }
+
+        $statuses = Status::all();
+
+        return inertia('Expert/ThesisReview', [
+            'thesis' => $thesis,
+            'statuses' => $statuses,
+        ]);
     }
 
     public function participants()

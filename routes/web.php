@@ -116,6 +116,8 @@ Route::prefix('admin')->middleware(config('moonshine.middleware'))->group(functi
 Route::middleware(['auth', 'verified'])->prefix('expert')->group(function () {
     Route::get('/', [ExpertController::class, 'dashboard'])->name('dashboard');
     Route::get('/participants', [ExpertController::class, 'participants'])->name('participants');
+    Route::get('/theses', [ExpertController::class, 'theses'])->name('expert.theses');
+    Route::get('/theses/{id}/review', [ExpertController::class, 'review'])->name('expert.thesis.review');
 });
 
 

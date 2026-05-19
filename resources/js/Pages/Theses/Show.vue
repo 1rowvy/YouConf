@@ -65,6 +65,23 @@
         </div>
       </div>
 
+      <div v-if="thesis.review_comment && !isExpert" class="mb-8 p-5 bg-amber-50 border border-amber-100 rounded-xl">
+        <p class="text-xs font-bold text-amber-600 uppercase tracking-wider mb-2">Рецензия эксперта</p>
+        <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{{ thesis.review_comment }}</p>
+      </div>
+
+      <div v-if="isThesisOwner && thesis.status_id === 3" class="mb-6 flex items-center gap-2">
+        <span class="text-sm text-gray-500">
+          Использовано правок:
+          <span :class="thesis.revision_count >= revision_limit ? 'text-red-500 font-bold' : 'font-semibold text-gray-700'">
+            {{ thesis.revision_count }} / {{ revision_limit }}
+          </span>
+        </span>
+        <span v-if="thesis.revision_count >= revision_limit" class="text-xs text-red-500 font-medium">
+          — лимит исчерпан
+        </span>
+      </div>
+
       <div class="pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-center gap-4">
         <div v-if="isExpert" class="w-full sm:w-auto">
           <select
@@ -147,6 +164,10 @@ export default {
     messages: Array,
     mediaFiles: Array,
     statuses: Array,
+    revision_limit: {
+      type: Number,
+      default: 1,
+    },
   },
   data() {
     return {
@@ -164,7 +185,9 @@ export default {
       return this.$page.props.user_data.id === this.thesis.user.id
     },
     isDisabled() {
-      return [2, 4].includes(this.thesis.status_id)
+      if ([1, 2, 4].includes(this.thesis.status_id)) return true
+      if (this.thesis.status_id === 3 && this.thesis.revision_count >= this.revision_limit) return true
+      return false
     },
     isExpert() {
       return this.$page.props.role === 'expert'

@@ -45,6 +45,7 @@ class ThesisController extends Controller
     {
         $request->validate([
             'status_id' => 'required|exists:statuses,id',
+            'review_comment' => 'nullable|string|max:5000',
         ]);
 
         $user = Auth::user();
@@ -55,6 +56,7 @@ class ThesisController extends Controller
         $thesis = Thesis::with(['status', 'user', 'section'])->findOrFail($id);
         $oldStatus = $thesis->status;
         $thesis->status_id = $request->status_id;
+        $thesis->review_comment = $request->review_comment;
         $thesis->save();
 
         $newStatus = $thesis->fresh()->status;
@@ -152,10 +154,17 @@ class ThesisController extends Controller
 
     public function update(Request $request, $id)
     {
-        $thesis = Thesis::findOrFail($id);
-        if (in_array($thesis->status_id, [2, 4])) {
-            return response()->json(['error' => 'Редактирование выступления невозможно, так как статус не позволяет это.'], 403);
+        $thesis = Thesis::with('section')->findOrFail($id);
+
+        if ($thesis->status_id !== 3) {
+            return response()->json(['error' => 'Отправка правки невозможна: тезис не находится в статусе «На доработку».'], 403);
         }
+
+        $section = $thesis->section;
+        if ($thesis->revision_count >= $section->revision_limit) {
+            return response()->json(['error' => 'Лимит правок исчерпан.'], 403);
+        }
+
         DB::transaction(function () use ($request, $thesis) {
             $thesis->update([
                 'title' => $request->title,
@@ -167,6 +176,10 @@ class ThesisController extends Controller
                     $thesis->addMedia($file)->toMediaCollection('attachments');
                 }
             }
+            $thesis->increment('revision_count');
+            $thesis->status_id = 1;
+            $thesis->review_comment = null;
+            $thesis->save();
         });
 
         return redirect()->intended(route('user.show', ['id' => Auth::user()->id]));
@@ -197,9 +210,10 @@ class ThesisController extends Controller
 
         return inertia('Theses/Show', [
             'thesis' => $thesis,
-            'messages' => $messages, // Передаем сообщения в представление
+            'messages' => $messages,
             'mediaFiles' => $mediaFiles,
             'statuses' => $statuses,
+            'revision_limit' => $thesis->section->revision_limit,
         ]);
     }
 

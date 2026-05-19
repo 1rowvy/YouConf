@@ -18,7 +18,9 @@ class Thesis extends Model implements HasMedia
         'user_id',
         'status_id',
         'section_id',
-        'co_authors'
+        'co_authors',
+        'revision_count',
+        'review_comment',
     ];
 
     public function registerMediaCollections(): void
