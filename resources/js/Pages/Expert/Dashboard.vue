@@ -1,46 +1,16 @@
 <template>
     <div class="flex flex-col gap-8">
-        <header
-            class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4"
-        >
-            <div>
-                <p class="text-sm text-gray-400 mb-1">Главная</p>
-            </div>
-        </header>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div
-                v-for="stat in stats"
-                :key="stat.label"
-                class="bg-white border border-gray-100 rounded-2xl p-5 flex items-center gap-4 shadow-sm"
-            >
-                <div
-                    :class="[
-                        'w-12 h-12 rounded-xl flex items-center justify-center',
-                        stat.bg,
-                    ]"
-                >
-                    <component :is="stat.icon" :size="22" :class="stat.fg" />
-                </div>
-                <div>
-                    <p class="text-xs text-gray-400 font-medium">
-                        {{ stat.label }}
-                    </p>
-                    <p class="text-2xl font-bold text-gray-900 leading-tight">
-                        {{ stat.value }}
-                    </p>
-                </div>
-            </div>
-        </div>
-
         <section>
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-bold text-gray-900">
-                    Назначенные секции
-                </h2>
-                <span class="text-sm text-gray-400">
-                    Всего: {{ sections.length }}
-                </span>
+            <div class="flex flex-col mb-4">
+                <p class="text-sm text-gray-400 mb-1">Главная</p>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">
+                        Назначенные секции
+                    </h2>
+                    <span class="text-sm text-gray-400">
+                        Всего: {{ sections.length }}
+                    </span>
+                </div>
             </div>
 
             <div
@@ -55,10 +25,7 @@
                 <div
                     v-for="section in sections"
                     :key="section.id"
-                    :class="[
-                        'group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full overflow-hidden border border-gray-100 border-t-4',
-                        statusBorder[section.status] || 'border-t-gray-200',
-                    ]"
+                    class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full overflow-hidden border border-gray-100"
                 >
                     <div class="p-6 flex-1 flex flex-col">
                         <div

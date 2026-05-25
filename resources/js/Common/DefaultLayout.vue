@@ -130,14 +130,19 @@
                             href="/schedules"
                             class="block px-4 py-2.5 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition-all"
                         >
-                            Раписание
+                            Расписание
                         </a>
                         <a
-                            v-if="$page.props?.role === 'expert'"
                             href="/theses"
                             class="block px-4 py-2.5 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition-all"
                         >
                             Тезисы
+                        </a>
+                        <a
+                            href="/documents"
+                            class="block px-4 py-2.5 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition-all"
+                        >
+                            Документы
                         </a>
                         <a
                             v-if="$page.props?.role === 'expert'"
@@ -145,6 +150,13 @@
                             class="block px-4 py-2.5 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition-all"
                         >
                             Участники
+                        </a>
+                        <a
+                            v-if="$page.props?.role === 'expert'"
+                            href="/expert"
+                            class="block px-4 py-2.5 text-sm font-semibold text-white bg-black hover:bg-gray-800 rounded-lg transition-all text-center"
+                        >
+                            Панель эксперта
                         </a>
 
                         <!-- Divider -->
@@ -252,14 +264,19 @@
                     href="/schedules"
                     class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-all"
                 >
-                    Раписание
+                    Расписание
                 </a>
                 <a
-                    v-if="$page.props?.role === 'expert'"
                     href="/theses"
                     class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-all"
                 >
                     Тезисы
+                </a>
+                <a
+                    href="/documents"
+                    class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-all"
+                >
+                    Документы
                 </a>
                 <a
                     v-if="$page.props?.role === 'expert'"
@@ -267,6 +284,13 @@
                     class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-all"
                 >
                     Участники
+                </a>
+                <a
+                    v-if="$page.props?.role === 'expert'"
+                    href="/expert"
+                    class="px-4 py-2 text-sm font-semibold text-white bg-black hover:bg-gray-800 rounded-full transition-all"
+                >
+                    Панель эксперта
                 </a>
             </div>
         </nav>

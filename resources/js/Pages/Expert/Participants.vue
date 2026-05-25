@@ -5,17 +5,9 @@
         >
             <div>
                 <p class="text-sm text-gray-400 mb-1">Участники</p>
-                <p
-                    class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight"
-                >
+                <p class="text-2xl font-bold text-gray-900">
                     Список зарегистрированных участников
                 </p>
-            </div>
-            <div
-                class="flex items-center gap-2 text-sm font-semibold text-gray-700 bg-white border border-gray-100 rounded-full px-4 py-2 shadow-sm self-start"
-            >
-                <Users :size="16" class="text-gray-400" />
-                <span>{{ totalParticipants }} участников</span>
             </div>
         </header>
 

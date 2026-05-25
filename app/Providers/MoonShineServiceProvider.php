@@ -10,6 +10,7 @@ use App\MoonShine\Resources\MoonShineUserResource;
 use App\MoonShine\Resources\MoonShineUserRoleResource;
 use App\MoonShine\Resources\ScheduleResource;
 use App\MoonShine\Resources\SectionResource;
+use App\MoonShine\Resources\DocumentResource;
 use App\MoonShine\Resources\StaticPageResource;
 use App\MoonShine\Resources\StatusResource;
 use App\MoonShine\Resources\ThesisKanbanResource;
@@ -43,6 +44,7 @@ class MoonShineServiceProvider extends ServiceProvider
                 SectionResource::class,
                 StatusResource::class,
                 StaticPageResource::class,
+                DocumentResource::class,
             ])
             ->pages([
                 ...$config->getPages(),

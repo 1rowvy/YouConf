@@ -128,8 +128,39 @@ class ExpertController extends Controller
             abort(403);
         }
 
+        $sections = $user->sections->map(fn($s) => array_merge($s->toArray(), [
+            'status' => $s->status->value,
+            'status_label' => $s->status->label(),
+        ]));
 
+        return inertia('Expert/Sections', ['sections' => $sections]);
+    }
 
-        return inertia('Expert/Sections');
+    public function updateSection(int $id)
+    {
+        $user = User::findOrFail(Auth::user()->id);
+
+        if (!$user->hasRole('expert')) {
+            abort(403);
+        }
+
+        $sectionIds = $user->sections()->pluck('sections.id');
+        if (!$sectionIds->contains($id)) {
+            abort(403);
+        }
+
+        $validated = request()->validate([
+            'status'                => 'required|in:planned,registration,thesis_submission,thesis_review,ongoing,finished',
+            'start_date'            => 'required|date',
+            'end_date'              => 'required|date|after_or_equal:start_date',
+            'start_time'            => ['required', 'regex:/^\d{2}:\d{2}$/'],
+            'end_time'              => ['required', 'regex:/^\d{2}:\d{2}$/'],
+            'revision_limit'        => 'required|integer|min:1|max:99',
+            'presentation_duration' => 'required|integer|min:1|max:300',
+        ]);
+
+        Section::findOrFail($id)->update($validated);
+
+        return redirect()->back();
     }
 }

@@ -5,19 +5,168 @@
         >
             <div>
                 <p class="text-sm text-gray-400 mb-1">Секции</p>
-                <p
-                    class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight"
-                >
+                <p class="text-2xl font-bold text-gray-900">
                     Назначенные секции
                 </p>
             </div>
         </header>
+
+        <div v-if="forms.length === 0" class="text-sm text-gray-400">
+            Вам не назначено ни одной секции.
+        </div>
+
+        <div
+            v-for="(form, i) in forms"
+            :key="form.id"
+            class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"
+        >
+            <div
+                class="px-6 py-5 border-b border-gray-50 flex items-center justify-between gap-4"
+            >
+                <div>
+                    <p class="font-semibold text-gray-900">{{ form.name }}</p>
+                </div>
+                <span
+                    class="text-xs font-medium px-2.5 py-1 rounded-full"
+                    :class="statusClasses[form.status]"
+                >
+                    {{ statusLabel(form.status) }}
+                </span>
+            </div>
+
+            <div
+                class="px-6 py-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+            >
+                <div class="sm:col-span-2 lg:col-span-3">
+                    <label
+                        class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5"
+                        >Статус</label
+                    >
+                    <select
+                        v-model="form.status"
+                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-gray-400"
+                    >
+                        <option
+                            v-for="opt in statusOptions"
+                            :key="opt.value"
+                            :value="opt.value"
+                        >
+                            {{ opt.label }}
+                        </option>
+                    </select>
+                </div>
+
+                <div>
+                    <label
+                        class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5"
+                        >Дата начала</label
+                    >
+                    <input
+                        type="date"
+                        v-model="form.start_date"
+                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-gray-400"
+                    />
+                </div>
+
+                <div>
+                    <label
+                        class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5"
+                        >Дата окончания</label
+                    >
+                    <input
+                        type="date"
+                        v-model="form.end_date"
+                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-gray-400"
+                    />
+                </div>
+
+                <div class="sm:col-span-2 lg:col-span-1">
+                    <label
+                        class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5"
+                        >Лимит попыток</label
+                    >
+                    <input
+                        type="number"
+                        v-model="form.revision_limit"
+                        min="1"
+                        max="99"
+                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-gray-400"
+                    />
+                </div>
+
+                <div>
+                    <label
+                        class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5"
+                        >Начало работы секции</label
+                    >
+                    <input
+                        type="time"
+                        v-model="form.start_time"
+                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-gray-400"
+                    />
+                </div>
+
+                <div>
+                    <label
+                        class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5"
+                        >Конец работы секции</label
+                    >
+                    <input
+                        type="time"
+                        v-model="form.end_time"
+                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-gray-400"
+                    />
+                </div>
+
+                <div>
+                    <label
+                        class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5"
+                        >Длительность защиты (мин)</label
+                    >
+                    <input
+                        type="number"
+                        v-model="form.presentation_duration"
+                        min="1"
+                        max="300"
+                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-gray-400"
+                    />
+                </div>
+            </div>
+
+            <div v-if="errors[i]" class="px-6 pb-3">
+                <p
+                    v-for="(msg, field) in errors[i]"
+                    :key="field"
+                    class="text-xs text-red-500"
+                >
+                    {{ msg }}
+                </p>
+            </div>
+
+            <div class="px-6 pb-5 flex justify-end">
+                <button
+                    @click="save(i)"
+                    :disabled="form._loading"
+                    class="flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-bold transition-all"
+                    :class="
+                        form._saved
+                            ? 'bg-emerald-50 text-emerald-600'
+                            : 'bg-black text-white hover:bg-gray-800 shadow-lg shadow-black/10 disabled:opacity-60 disabled:cursor-not-allowed'
+                    "
+                >
+                    <span v-if="form._loading">Сохранение...</span>
+                    <span v-else-if="form._saved">Сохранено</span>
+                    <span v-else>Сохранить</span>
+                </button>
+            </div>
+        </div>
     </div>
 </template>
+
 <script setup>
-import { computed } from "vue";
+import { ref } from "vue";
+import { Inertia } from "@inertiajs/inertia";
 import ExpertLayout from "../../Common/ExpertLayout.vue";
-import { Link } from "@inertiajs/inertia-vue3";
 
 defineOptions({
     meta: {
@@ -31,6 +180,15 @@ const props = defineProps({
         default: () => [],
     },
 });
+
+const statusOptions = [
+    { value: "planned", label: "Запланирована" },
+    { value: "registration", label: "Регистрация участников" },
+    { value: "thesis_submission", label: "Отправка тезисов" },
+    { value: "thesis_review", label: "Проверка тезисов" },
+    { value: "ongoing", label: "Идёт" },
+    { value: "finished", label: "Прошла" },
+];
 
 const statusClasses = {
     planned: "bg-orange-50 text-orange-600",
@@ -50,38 +208,55 @@ const statusBorder = {
     finished: "border-t-gray-200",
 };
 
-const stats = computed(() => [
-    {
-        label: "Всего секций",
-        value: props.sections.length,
-        icon: Layers,
-        bg: "bg-blue-50",
-        fg: "text-blue-600",
-    },
-    {
-        label: "На рецензии",
-        value: props.sections.filter((s) =>
-            ["thesis_review", "thesis_submission"].includes(s.status),
-        ).length,
-        icon: FileSearch,
-        bg: "bg-amber-50",
-        fg: "text-amber-600",
-    },
-    {
-        label: "Активных",
-        value: props.sections.filter((s) => s.status === "ongoing").length,
-        icon: PlayCircle,
-        bg: "bg-emerald-50",
-        fg: "text-emerald-600",
-    },
-]);
+const statusLabel = (value) =>
+    statusOptions.find((o) => o.value === value)?.label ?? value;
 
-const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${day}.${month}.${year}`;
-};
+const trimTime = (t) => (t ? t.slice(0, 5) : "");
+
+const forms = ref(
+    props.sections.map((s) => ({
+        ...s,
+        start_time: trimTime(s.start_time),
+        end_time: trimTime(s.end_time),
+        _loading: false,
+        _saved: false,
+    })),
+);
+
+const errors = ref(props.sections.map(() => null));
+
+function save(i) {
+    const f = forms.value[i];
+    f._loading = true;
+    f._saved = false;
+    errors.value[i] = null;
+
+    Inertia.patch(
+        `/expert/sections/${f.id}`,
+        {
+            status: f.status,
+            start_date: f.start_date,
+            end_date: f.end_date,
+            start_time: f.start_time,
+            end_time: f.end_time,
+            revision_limit: f.revision_limit,
+            presentation_duration: f.presentation_duration,
+        },
+        {
+            preserveState: true,
+            preserveScroll: true,
+            onSuccess: () => {
+                f._loading = false;
+                f._saved = true;
+                setTimeout(() => {
+                    f._saved = false;
+                }, 2500);
+            },
+            onError: (errs) => {
+                f._loading = false;
+                errors.value[i] = errs;
+            },
+        },
+    );
+}
 </script>

@@ -8,6 +8,7 @@ use App\MoonShine\Pages\ImportExportPage;
 use App\MoonShine\Resources\LocationResource;
 use App\MoonShine\Resources\ScheduleResource;
 use App\MoonShine\Resources\SectionResource;
+use App\MoonShine\Resources\DocumentResource;
 use App\MoonShine\Resources\StaticPageResource;
 use App\MoonShine\Resources\ThesisKanbanResource;
 use App\MoonShine\Resources\ThesisResource;
@@ -45,6 +46,7 @@ final class MoonShineLayout extends CompactLayout
             MenuItem::make('Тезисы', ThesisResource::class),
             MenuItem::make('Аудитории', LocationResource::class),
             MenuItem::make('Секции', SectionResource::class),
+            MenuItem::make('Документы', DocumentResource::class),
             MenuItem::make('Пользовательские страницы', StaticPageResource::class),
             MenuItem::make('Импорт / Экспорт', ImportExportPage::class),
         ];

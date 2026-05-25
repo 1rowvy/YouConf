@@ -94,6 +94,10 @@ use App\Http\Controllers\ScheduleController;
 
 Route::get('/schedules', [ScheduleController::class, 'show'])->name('schedules.show');
 
+use App\Http\Controllers\DocumentController;
+
+Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+
 Route::get('/schedules/section/{sectionId}', [ScheduleController::class, 'getThesesBySection']);
 
 
@@ -119,6 +123,8 @@ Route::middleware(['auth', 'verified'])->prefix('expert')->group(function () {
     Route::get('/participants', [ExpertController::class, 'participants'])->name('participants');
     Route::get('/theses', [ExpertController::class, 'theses'])->name('expert.theses');
     Route::get('/theses/{id}/review', [ExpertController::class, 'review'])->name('expert.thesis.review');
+    Route::get('/sections', [ExpertController::class, 'sections'])->name('expert.sections');
+    Route::patch('/sections/{id}', [ExpertController::class, 'updateSection'])->name('expert.sections.update');
     Route::get('/mailings', [MailingController::class, 'index'])->name('expert.mailings');
     Route::post('/mailings/send', [MailingController::class, 'send'])->name('expert.mailings.send');
 });

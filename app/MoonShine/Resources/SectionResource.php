@@ -81,6 +81,10 @@ class SectionResource extends ModelResource
                 BelongsToMany::make('Аудитории', 'locations', resource: LocationResource::class),
             ]),
 
+            Box::make('Реценизрование', [
+                Number::make('Лимит проверок', 'revision_limit'),
+            ]),
+
             Box::make('Даты проведения', [
                 Date::make('Дата начала', 'start_date')->required(),
                 Date::make('Дата окончания', 'end_date')->required(),

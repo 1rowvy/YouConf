@@ -19,25 +19,17 @@ class ThesisController extends Controller
 {
     public function index()
     {
-        $user = User::findOrFail(Auth::user()->id);
-        $statuses = Status::all();
-        $userSections = $user->sections()->get();
+        $theses = Thesis::where('status_id', 2)
+            ->with(['section', 'user', 'status'])
+            ->get();
 
-        if ($user->hasRole('participant')) {
-            $theses = Thesis::where('user_id', $user->id)
-                ->with(['section', 'user', 'status'])
-                ->get();
-        } elseif ($user->hasRole('expert')) {
-            // Если пользователь эксперт, показываем заявки только из его секций
-            $sectionIds = $user->sections()->pluck('sections.id');
-            $theses = Thesis::whereIn('section_id', $sectionIds)
-                ->with(['section', 'user', 'status'])
-                ->get();
-        }
+        $sections = Section::whereHas('theses', fn($q) => $q->where('status_id', 2))
+            ->orderBy('name')
+            ->get(['id', 'name']);
 
         return inertia('Theses/Index', [
-            'theses' => $theses,
-            'statuses' => $statuses,
+            'theses'   => $theses,
+            'sections' => $sections,
         ]);
     }
 

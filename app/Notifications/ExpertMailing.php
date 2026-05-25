@@ -25,6 +25,9 @@ class ExpertMailing extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject($this->subject)
-            ->line($this->body);
+            ->view('emails.expert-mailing', [
+                'body'      => $this->body,
+                'firstName' => $notifiable->first_name ?? null,
+            ]);
     }
 }

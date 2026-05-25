@@ -1,34 +1,34 @@
 <template>
   <div class="max-w-7xl mx-auto py-10 px-4">
     <div class="mb-8">
-      <h1 class="text-2xl md:text-4xl font-extrabold text-[#1a1a1a] mb-6">Тезисы</h1>
+      <h1 class="text-2xl md:text-4xl font-extrabold text-[#1a1a1a] mb-2">Принятые тезисы</h1>
+      <p class="text-sm text-gray-400">Список тезисов, принятых к участию в конференции</p>
+    </div>
 
-      <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-        <label for="statusFilter" class="text-sm font-bold text-gray-700">
-          Фильтр по статусу:
-        </label>
-        <select
-          v-model="selectedStatus"
-          id="statusFilter"
-          class="px-4 py-2 border border-gray-200 rounded-xl bg-white hover:border-gray-300 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-semibold"
+    <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
+      <label for="sectionFilter" class="text-sm font-bold text-gray-700 whitespace-nowrap">
+        Фильтр по секции:
+      </label>
+      <select
+        v-model="selectedSection"
+        id="sectionFilter"
+        class="px-4 py-2 border border-gray-200 rounded-xl bg-white hover:border-gray-300 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-semibold"
+      >
+        <option value="">Все секции</option>
+        <option
+          v-for="section in sections"
+          :key="section.id"
+          :value="section.id"
         >
-          <option value="">Все статусы</option>
-          <option
-            v-for="status in statuses"
-            :key="status.id"
-            :value="status.id"
-          >
-            {{ status.name }}
-          </option>
-        </select>
-      </div>
+          {{ section.name }}
+        </option>
+      </select>
     </div>
 
     <ThesesTable
       :theses="filteredTheses"
-      :statuses="statuses"
+      :statuses="[]"
       :role="$page.props.role"
-      @status-updated="handleStatusUpdated"
       @sort="toggleSort"
     />
   </div>
@@ -41,7 +41,7 @@ import ThesesTable from '@/Components/ThesesTable.vue'
 export default {
   props: {
     theses: Array,
-    statuses: Array,
+    sections: Array,
   },
   components: {
     Link,
@@ -49,27 +49,30 @@ export default {
   },
   data() {
     return {
-      selectedStatus: '',
+      selectedSection: '',
       sortBy: 'created_at',
       sortOrder: 'desc',
     }
   },
   computed: {
     filteredTheses() {
-      let filtered = this.theses.filter((thesis) => {
-        return (
-          this.selectedStatus === '' || thesis.status_id === this.selectedStatus
-        )
-      })
+      let result = this.selectedSection
+        ? this.theses.filter((t) => t.section_id === this.selectedSection)
+        : this.theses
 
-      // Сортировка
-      return filtered.sort((a, b) => {
+      return [...result].sort((a, b) => {
         let valueA = a[this.sortBy]
         let valueB = b[this.sortBy]
 
-        if (this.sortBy === 'title' || this.sortBy === 'section.name') {
-          valueA = this.sortBy === 'section.name' ? a.section.name : valueA
-          valueB = this.sortBy === 'section.name' ? b.section.name : valueB
+        if (this.sortBy === 'title') {
+          return this.sortOrder === 'asc'
+            ? valueA.localeCompare(valueB)
+            : valueB.localeCompare(valueA)
+        }
+
+        if (this.sortBy === 'section.name') {
+          valueA = a.section.name
+          valueB = b.section.name
           return this.sortOrder === 'asc'
             ? valueA.localeCompare(valueB)
             : valueB.localeCompare(valueA)
@@ -85,19 +88,6 @@ export default {
     },
   },
   methods: {
-    formatDate(date) {
-      return new Date(date).toLocaleDateString() // Форматирование даты
-    },
-    async updateStatus(thesisId, statusId) {
-      try {
-        await this.$inertia.post(`/theses/${thesisId}/status`, {
-          status_id: statusId,
-        })
-        this.$emit('status-updated')
-      } catch (error) {
-        console.error('Ошибка при обновлении статуса:', error)
-      }
-    },
     toggleSort(field) {
       if (this.sortBy === field) {
         this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'

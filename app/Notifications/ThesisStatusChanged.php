@@ -8,9 +8,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
-
-use Illuminate\Support\Facades\DB;
 
 class ThesisStatusChanged extends Notification implements ShouldQueue
 {
@@ -61,14 +58,13 @@ class ThesisStatusChanged extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Ваша работа проверена экспертом — YouConf')
-            ->greeting("Здравствуйте, {$notifiable->first_name}!")
-            ->line(sprintf(
-                'Статус вашей работы «%s» изменён с «%s» на «%s».',
-                $this->thesis->title,
-                $this->oldStatus->name,
-                $this->newStatus->name
-            ))
-            ->action('Посмотреть тезис', url("/theses/{$this->thesis->id}"));
+            ->subject('Статус вашей работы изменён — YouConf')
+            ->view('emails.thesis-status-changed', [
+                'firstName'   => $notifiable->first_name,
+                'thesisTitle' => $this->thesis->title,
+                'oldStatus'   => $this->oldStatus->name,
+                'newStatus'   => $this->newStatus->name,
+                'url'         => url("/theses/{$this->thesis->id}"),
+            ]);
     }
 }

@@ -68,6 +68,6 @@ class MailingController extends Controller
 
         Notification::send($recipients, new ExpertMailing($request->subject, $request->body));
 
-        return redirect('/expert/mailings')->with('success', 'Рассылка поставлена в очередь и будет отправлена в ближайшее время.');
+        return redirect('/expert/mailings')->with('success', 'Рассылка отправлена');
     }
 }
